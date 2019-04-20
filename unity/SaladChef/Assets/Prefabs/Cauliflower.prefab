@@ -46,7 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _point: 0
   _name: Cauliflower
-  Vegitable: {fileID: 21300000, guid: ff3e52c1aca970a4385b4ca8a83a58c4, type: 3}
+  VegetableSprite: {fileID: 21300000, guid: ff3e52c1aca970a4385b4ca8a83a58c4, type: 3}
   SlicedVegitable: {fileID: 21300000, guid: ff3e52c1aca970a4385b4ca8a83a58c4, type: 3}
 --- !u!212 &8161690970548507819
 SpriteRenderer:

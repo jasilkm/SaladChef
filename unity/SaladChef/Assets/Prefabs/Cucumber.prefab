@@ -46,7 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _point: 0
   _name: cucumber
-  Vegitable: {fileID: 21300000, guid: 11dad083c14a4ee4fa0c6e8d0378fd27, type: 3}
+  VegetableSprite: {fileID: 21300000, guid: 11dad083c14a4ee4fa0c6e8d0378fd27, type: 3}
   SlicedVegitable: {fileID: 21300000, guid: 11dad083c14a4ee4fa0c6e8d0378fd27, type: 3}
 --- !u!212 &1028047636859313446
 SpriteRenderer:

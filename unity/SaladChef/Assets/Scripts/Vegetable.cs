@@ -10,7 +10,7 @@ public class Vegetable : MonoBehaviour
     #endregion
 
     #region public properties
-    public Sprite Vegitable;
+    public Sprite VegetableSprite;
     public Sprite SlicedVegitable;
     #endregion
 
@@ -21,7 +21,7 @@ public class Vegetable : MonoBehaviour
     void Start()
     {
         SpriteRenderer Sprite = GetComponent<SpriteRenderer>();
-        Sprite.sprite = Vegitable;
+        Sprite.sprite = VegetableSprite;
     }
 
     void Update()

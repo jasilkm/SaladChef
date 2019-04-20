@@ -46,7 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _point: 0
   _name: cabbege
-  Vegitable: {fileID: 21300000, guid: dca3ce53ff81a884794049b1f7933466, type: 3}
+  VegetableSprite: {fileID: 21300000, guid: dca3ce53ff81a884794049b1f7933466, type: 3}
   SlicedVegitable: {fileID: 21300000, guid: dca3ce53ff81a884794049b1f7933466, type: 3}
 --- !u!212 &5445887599598761211
 SpriteRenderer:
