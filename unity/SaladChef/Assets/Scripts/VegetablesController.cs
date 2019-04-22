@@ -2,18 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+
 public class VegetablesController : MonoBehaviour
 {
-
-
-
     #region private properties
     [SerializeField] private Vegetable[] _vegitables; // vegitable Object
     [SerializeField] private Transform[] _spwanPoints; // Spwaning points for Vegitable
     [SerializeField] private GameObject _progressbar;
+
+    private Vegetable SlicedVeg;
+    private int[] _randomNumber = new int[] { 0,1,2,3,4,5};
     #endregion
 
     #region public properties
+    public ServePlateController ServePlateController;
     #endregion
 
     #region Events 
@@ -25,6 +27,7 @@ public class VegetablesController : MonoBehaviour
     void Start()
     {
         SpwanVegetables();
+
     }
 
     // Update is called once per frame
@@ -57,6 +60,7 @@ public class VegetablesController : MonoBehaviour
     /// <param name="slicingCompleteHandler"> this handler will callback when slicing has completed</param>
     public void SliceVegetable(List<Vegetable> veg, Transform cutTable, Action slicingCompleteHandler)
     {
+        //Debug.Log(""+ cutTable.GetComponent<ChopPad>().ChopPadID);
         int vegOrder = 0;
         PlaceVegetablesOnChopboard(veg[vegOrder], cutTable);
         GameObject progressbar = Instantiate(_progressbar, cutTable);
@@ -67,30 +71,36 @@ public class VegetablesController : MonoBehaviour
             {
                 if (totalVegCount == vegOrder)
                 {
+
+                    ServePlateController.AddSlicesToServePlate(SlicedVeg, cutTable.GetComponent<ChopPad>().ChopPadID);
                     slicingCompleteHandler();
                     progressBarController.RemoveProgressBar();
 
                 }
                 else
                 {
+                    ServePlateController.AddSlicesToServePlate(SlicedVeg, cutTable.GetComponent<ChopPad>().ChopPadID);
                     vegOrder++;
                     progressBarController.ResetProgress(veg[vegOrder].VegetableSprite);
                     PlaceVegetablesOnChopboard(veg[vegOrder], cutTable);
                 }
-                
-              
-
             });
-
-       
-       
-
-
-        
-       
     }
+    /// <summary>
+    /// Generating Customer required vegetables
+    /// </summary>
+    /// <returns> list of vegtables/  two or three</returns>
+    public List<Vegetable> GenerateCustomersSaladIngrediants()
+    {
+        _randomNumber = SaladChefHelper.Shuffle(_randomNumber);
 
-
+        List<Vegetable> cl= new List<Vegetable>();
+        for (int i = 0; i < UnityEngine.Random.Range(2,4); i++)
+        {
+            cl.Add(_vegitables[_randomNumber[i]]);
+        }
+        return cl;
+    }
     #endregion
 
     #region private methods
@@ -101,7 +111,8 @@ public class VegetablesController : MonoBehaviour
     /// <param name="chopBoard"></param>
     private void PlaceVegetablesOnChopboard(Vegetable veg, Transform chopBoard)
     {
-        Instantiate(veg, chopBoard);
+        SlicedVeg =  Instantiate(veg, chopBoard);
+        SlicedVeg.transform.localScale = Vector3.one;
     }
     
     #endregion

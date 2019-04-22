@@ -31,3 +31,13 @@ public class Vegetable : MonoBehaviour
     #endregion
 
 }
+
+public enum SaladIngredients
+{
+    Pepper =1,
+    Cauliflower =2,
+    Cucumber =3,
+    Salad = 4,
+    Carrot =5,
+    Cabbege = 6
+}

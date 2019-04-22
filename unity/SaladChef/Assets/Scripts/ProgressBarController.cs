@@ -9,6 +9,7 @@ public class ProgressBarController : MonoBehaviour
     #region private properties
     [SerializeField] private Image _progressImage;
     private float _elapsedTime;
+    private float _requiredTime;
     private Action _progressCompletedhandler;
     private bool _isProgressable = false;
 
@@ -38,10 +39,19 @@ public class ProgressBarController : MonoBehaviour
     #endregion
 
     #region public methods
-    public void Init(Sprite vegSprite,float sliceTime,Action progressCompletedhandler)   {
+    public void Init(Sprite vegSprite,float requiredTime,Action progressCompletedhandler)   {
         _progressImage.fillAmount = 0;
         _isProgressable = true;
         VegSprite.sprite = vegSprite;
+        _progressCompletedhandler = progressCompletedhandler;
+    }
+
+    public void Init(float requiredTime, Action progressCompletedhandler)
+    {
+        _progressImage.fillAmount = 0;
+        _isProgressable = true;
+        _requiredTime = requiredTime;
+        _elapsedTime = 0.0f;
         _progressCompletedhandler = progressCompletedhandler;
     }
     public void RemoveProgressBar()
@@ -64,10 +74,9 @@ public class ProgressBarController : MonoBehaviour
     private void UpdateProgressBar()
     {
         _elapsedTime += Time.deltaTime;
-        _progressImage.fillAmount = SaladChefHelper.NormalizedValue(_elapsedTime, 0, 10,0, 1);
+        _progressImage.fillAmount = SaladChefHelper.NormalizedValue(_elapsedTime, 0, _requiredTime, 0, 1);
 
         if (_progressImage.fillAmount >= 1) {
-            Debug.Log("Slice Completed");
             _progressCompletedhandler();
         }
     }
