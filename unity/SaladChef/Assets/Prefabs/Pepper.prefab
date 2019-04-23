@@ -48,6 +48,10 @@ MonoBehaviour:
   _name: pepper
   VegetableSprite: {fileID: 21300000, guid: c74b26b736b5b664285ed00e7d778734, type: 3}
   SlicedVegitable: {fileID: 21300000, guid: c74b26b736b5b664285ed00e7d778734, type: 3}
+  saladIngredients: 1
+  _isSliced: 0
+  TimeForSlice: 10
+  winPoints: 10
 --- !u!212 &7337927772934804576
 SpriteRenderer:
   m_ObjectHideFlags: 0

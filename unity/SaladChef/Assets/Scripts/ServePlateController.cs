@@ -33,7 +33,7 @@ public class ServePlateController : MonoBehaviour
         {
             //GameObject servePlate =  Instantiate(_servePlate, _servePlateHolder[0]);
             sliced.transform.SetParent(_servePlateHolder[0]);
-            sliced.transform.localPosition = new Vector3(0, -2, 0);
+            sliced.transform.localPosition = new Vector3(0, 0, -2);
             sliced.transform.localScale = Vector3.one;
 
         }
@@ -41,20 +41,22 @@ public class ServePlateController : MonoBehaviour
         {
             // GameObject servePlate = Instantiate(_servePlate, _servePlateHolder[1]);
             sliced.transform.SetParent(_servePlateHolder[1]);
-            sliced.transform.localPosition = new Vector3(0, -2, 0);
+            sliced.transform.localPosition = new Vector3(0, 0, -2);
             sliced.transform.localScale = Vector3.one;
         }
 
 
     }
 
-    public void AddSlicesToPlayer()
+    public void AddSlicesToPlayer(Transform player, GameObject plate)
     {
+        Vegetable[] veg = plate.GetComponentsInChildren<Vegetable>();
+        foreach (var item in veg)
+        {
+            item.GetComponent<Transform>().SetParent(player);
+        }
 
-       
-        Vegetable[] obj = this.GetComponentsInChildren<Vegetable>();
-        Debug.Log("count" + obj.Length);
-
+      //  Vegetable[] obj = this.GetComponentsInChildren<Vegetable>();
 
     }
 

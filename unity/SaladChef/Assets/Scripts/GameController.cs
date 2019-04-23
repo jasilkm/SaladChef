@@ -1,7 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using System;
+using System.Linq;
 public class GameController : MonoBehaviour
 {
     #region private properties
@@ -10,6 +11,7 @@ public class GameController : MonoBehaviour
     public PlayerMasterController playerMasterController;
     public CustomerController customerController;
     public VegetablesController vegetablesController;
+    public HudController hudController;
     #endregion
     #region protected properties
     #endregion
@@ -33,15 +35,30 @@ public class GameController : MonoBehaviour
     public void StartGame()
     {
         playerMasterController.EnablePlayers();
-        customerController.GenerateCustomers();
+        customerController.GenerateCustomers((score, playerid) => {
+
+            if (playerid == 1)
+            {
+                hudController.UpdatePlayeOneScore(score);
+            }
+            else if (playerid == 2)
+            {
+                hudController.UpdatePlayeTwoScore(score);
+            }
+
+        });
     }
+
+
+    #endregion
+
 
     public void GameOver()
     {
 
     }
 
-    #endregion
+
     #region protected methods
     #endregion
 }

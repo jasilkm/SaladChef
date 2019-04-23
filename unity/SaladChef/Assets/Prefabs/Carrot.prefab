@@ -48,6 +48,10 @@ MonoBehaviour:
   _name: carrot
   VegetableSprite: {fileID: 21300000, guid: d9810384d932f2d438f800e1a5d51ef0, type: 3}
   SlicedVegitable: {fileID: 21300000, guid: d9810384d932f2d438f800e1a5d51ef0, type: 3}
+  saladIngredients: 5
+  _isSliced: 0
+  TimeForSlice: 10
+  winPoints: 10
 --- !u!212 &1573834617146739179
 SpriteRenderer:
   m_ObjectHideFlags: 0

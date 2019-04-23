@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-
+using System.Linq;
 public class VegetablesController : MonoBehaviour
 {
     #region private properties
@@ -58,7 +58,7 @@ public class VegetablesController : MonoBehaviour
     /// <param name="veg">collected vegitables</param>
     /// <param name="cutTable"> chop board transform for placing veg and Progressbar</param>
     /// <param name="slicingCompleteHandler"> this handler will callback when slicing has completed</param>
-    public void SliceVegetable(List<Vegetable> veg, Transform cutTable, Action slicingCompleteHandler)
+    public void SliceVegetable(List<Vegetable> veg, Transform cutTable,Action<Vegetable> slicedVeg, Action slicingCompleteHandler)
     {
         //Debug.Log(""+ cutTable.GetComponent<ChopPad>().ChopPadID);
         int vegOrder = 0;
@@ -71,16 +71,20 @@ public class VegetablesController : MonoBehaviour
             {
                 if (totalVegCount == vegOrder)
                 {
-
+                    SlicedVeg._isSliced = true;
+                    slicedVeg(SlicedVeg);
                     ServePlateController.AddSlicesToServePlate(SlicedVeg, cutTable.GetComponent<ChopPad>().ChopPadID);
+                    vegOrder = 0;
                     slicingCompleteHandler();
                     progressBarController.RemoveProgressBar();
 
                 }
                 else
                 {
-                    ServePlateController.AddSlicesToServePlate(SlicedVeg, cutTable.GetComponent<ChopPad>().ChopPadID);
+                   ServePlateController.AddSlicesToServePlate(SlicedVeg, cutTable.GetComponent<ChopPad>().ChopPadID);
                     vegOrder++;
+                    SlicedVeg._isSliced = true;
+                    slicedVeg(SlicedVeg);
                     progressBarController.ResetProgress(veg[vegOrder].VegetableSprite);
                     PlaceVegetablesOnChopboard(veg[vegOrder], cutTable);
                 }
@@ -101,8 +105,8 @@ public class VegetablesController : MonoBehaviour
         }
         return cl;
     }
-    #endregion
 
+    #endregion
     #region private methods
     /// <summary>
     /// showing veg image on chopbard
@@ -113,7 +117,12 @@ public class VegetablesController : MonoBehaviour
     {
         SlicedVeg =  Instantiate(veg, chopBoard);
         SlicedVeg.transform.localScale = Vector3.one;
+        SlicedVeg.transform.localPosition = new Vector3(0,0,-2);
+        SlicedVeg.transform.localRotation = Quaternion.identity;
+        SlicedVeg.gameObject.SetActive(true);
     }
+
+    
     
     #endregion
     #region protected methods

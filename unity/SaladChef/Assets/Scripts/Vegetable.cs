@@ -12,6 +12,10 @@ public class Vegetable : MonoBehaviour
     #region public properties
     public Sprite VegetableSprite;
     public Sprite SlicedVegitable;
+    public SaladIngredients saladIngredients;
+    public bool _isSliced = false;
+    public float TimeForSlice;
+    public int winPoints;
     #endregion
 
     #region Events 

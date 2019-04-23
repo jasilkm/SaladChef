@@ -41,6 +41,8 @@ public class ProgressBarController : MonoBehaviour
     #region public methods
     public void Init(Sprite vegSprite,float requiredTime,Action progressCompletedhandler)   {
         _progressImage.fillAmount = 0;
+        _elapsedTime = 0;
+        _requiredTime = requiredTime;
         _isProgressable = true;
         VegSprite.sprite = vegSprite;
         _progressCompletedhandler = progressCompletedhandler;

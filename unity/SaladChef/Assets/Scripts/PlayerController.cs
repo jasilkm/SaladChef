@@ -1,20 +1,23 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using System.Linq;
 public class PlayerController : MonoBehaviour
 {
     #region private properties
     [SerializeField] private float _speed = 0.4f; // player  
-    [SerializeField] private int _playerID; // Player id 
     private VegetablesController vegetablesController;
     private int maxVegeCanCollect = 2; // max vegetables can collect from table 
     private bool _isActive = false; // when this bool is true Player movement restricted
+    private bool _isSlice = false;
     #endregion
 
     #region public properties
     public List <Vegetable> PickedVegetables = new List<Vegetable>();
+    public List<Vegetable> SlicedVegetables = new List<Vegetable>();
     public HudController hudController;
+    public int PlayerID; // Player id 
+
     #endregion
 
     #region Events 
@@ -55,7 +58,7 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     public void Move(float xMove, float yMove, float xMove1, float yMove1)
     {
-        if (_playerID == 1)
+        if (PlayerID == 1)
         {
             if (!_isActive)
             {
@@ -65,7 +68,7 @@ public class PlayerController : MonoBehaviour
             }
            
         }
-        else if (_playerID == 2)
+        else if (PlayerID == 2)
         {
             if (!_isActive)
             {
@@ -93,7 +96,7 @@ public class PlayerController : MonoBehaviour
                     if (PickedVegetables.Count != maxVegeCanCollect)
                     {
                         PickedVegetables.Add(veg);
-                        hudController.UpdatePlayersCollectedVeg(veg.VegetableSprite,this._playerID);
+                        hudController.UpdatePlayersCollectedVeg(veg.VegetableSprite,this.PlayerID);
                     }
                     else
                     {
@@ -103,31 +106,92 @@ public class PlayerController : MonoBehaviour
                 }
             case "vegcutter":
                 {
-                    if (PickedVegetables.Count >= 1)
+                    if (PickedVegetables.Count > 0)
                     {
                         _isActive = true;
-                        vegetablesController.SliceVegetable(PickedVegetables, other.transform, () => {
-                            _isActive = false;
-                            hudController.ClearCollectedVeg(_playerID);
-                           // Debug.Log("PickedVegetables :" + PickedVegetables.Count);
+                        vegetablesController.SliceVegetable(PickedVegetables, other.transform,
+                            (slice) => {
+                                SlicedVegetables.Add(slice);
+                            },
                             
-                        });
+                            () => {
+                            _isActive = false;
+                            PickedVegetables.Clear();
+
+                            });
                     }
                     break;
                 }
             case "serveplate":
                 {
-                   // Debug.Log("Serve plate detected"+ other.gameObject.name);
-                   // ServePlateController servePlateController = other.gameObject.GetComponent<ServePlateController>();
-                    //servePlateController.AddSlicesToPlayer();
+                    //Debug.Log("Serve plate detected"+ this);
+                    ServePlateController servePlateController = GameObject.FindObjectOfType<ServePlateController>();
+                    servePlateController.AddSlicesToPlayer(this.transform,other.gameObject);
                     break;
                 }
-                default:
+            case "customer":
+                {
+
+                   /* var customerRquested = other.gameObject.GetComponent<Customer>().CustomerRequestedVeg;
+                    vegetablesController.CompareVegetables(this.PickedVegetables, customerRquested,(isSuccess)=> {
+                        RemoveVegetable();
+                        hudController.ClearCollectedVeg(PlayerID);
+                        if (isSuccess)
+                        {
+
+                        }
+                    });*/
+                    break;
+                }
+            case "waitplate":
+                {
+                    var waitplate = other.gameObject.GetComponent<WaitPlateController>();
+                    if (PickedVegetables.Count > 0)
+                    {
+                       
+                        if (!waitplate._isFilled)
+                        {
+                            waitplate._isFilled = true;
+                            waitplate.CreateVege(PickedVegetables[0]);
+                            PickedVegetables.RemoveAt(0);
+                        }
+                        else
+                        {
+                            Debug.Log("Vegitable availabel");
+                        }
+                    }
+                    else
+                    {
+                        if (waitplate._isFilled)
+                        {
+                            if (PickedVegetables.Count == 0)
+                            {
+                                PickedVegetables.Clear();
+                                PickedVegetables.Add(waitplate.vegetable);
+                                waitplate.RemoveVegetable();
+                            }
+                        }
+                    }
+                    break;  
+                } 
+            default:  
                 break;
         }
 
 
        
+    }
+
+    public void RemoveVegetable()
+    {
+        Vegetable[] veg = this.gameObject.GetComponentsInChildren<Vegetable>();
+        foreach (var item in veg)
+        {
+           // Debug.Log(item.saladIngredients.ToString());
+            Destroy(item.gameObject);
+            PickedVegetables.Clear();
+            //item.GetComponent<Transform>().SetParent(player);
+        }
     }
     #endregion
     #region protected methods

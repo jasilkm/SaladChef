@@ -8,10 +8,12 @@ public class Customer : MonoBehaviour
     [SerializeField]private SpriteRenderer []vegetables;
     private GameObject UIRoot;
     private Action _timeCompletedHandler;
+    private Action<List<Vegetable>, List<Vegetable>, PlayerController,Customer > _playerHitted;
     private GameObject _progressBar;
     #endregion
     #region Public properties
     public GameObject ProgressBar;
+    public List<Vegetable> CustomerRequestedVeg { get; set; }
     #endregion
     #region protected properties
     #endregion
@@ -38,13 +40,22 @@ public class Customer : MonoBehaviour
 
     #region private Methods
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.tag == "Player")
+        {
+            PlayerController player = other.gameObject.GetComponent<PlayerController>();
+            _playerHitted(CustomerRequestedVeg, player.SlicedVegetables,player,this);
+        }
+    }
+
     private void CreateProgressBar(Transform pos)
     {
         _progressBar =  Instantiate(ProgressBar);
        _progressBar.transform.SetParent(UIRoot.transform);
        _progressBar.transform.position = SaladChefHelper.GetScreenPosition(pos.position.x, pos.position.y+1.5f);
         ProgressBarController pc = _progressBar.GetComponent<ProgressBarController>();
-        pc.Init(10, () => {
+        pc.Init(40, () => {
 
             _timeCompletedHandler();
         });
@@ -57,8 +68,10 @@ public class Customer : MonoBehaviour
     /// <param name="veg"></param>
     /// <param name="pos"></param>
     /// <param name="timeCompletedHandler"></param>
-    public void Init(List<Vegetable> veg,Transform pos, Action timeCompletedHandler)
+    public void Init(List<Vegetable> veg,Transform pos, Action timeCompletedHandler, Action<List<Vegetable>, List<Vegetable>,PlayerController,Customer> playerHitted)
     {
+        _playerHitted= playerHitted;
+        CustomerRequestedVeg = veg;
         int i = 0;
         foreach (var item in veg)
         {
@@ -68,11 +81,13 @@ public class Customer : MonoBehaviour
         _timeCompletedHandler = timeCompletedHandler;
         CreateProgressBar(pos);
     }
+
     /// <summary>
     /// Destory Customer Object
     /// </summary>
     public void Destroy()
     {
+        Debug.Log("destory called");
         Destroy(_progressBar);
         Destroy(this.gameObject);
     }

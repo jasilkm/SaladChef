@@ -8,6 +8,8 @@ TagManager:
   - vegcutter
   - serveplate
   - UIRoot
+  - customer
+  - waitplate
   layers:
   - Default
   - TransparentFX

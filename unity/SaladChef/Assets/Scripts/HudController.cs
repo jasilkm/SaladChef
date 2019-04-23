@@ -101,7 +101,6 @@ public class HudController : MonoBehaviour
             
             foreach (var obj in _playerTwoList)
             {
-                Debug.Log(obj);
                 Destroy(obj);
             }
             _playerTwoList.Clear();
