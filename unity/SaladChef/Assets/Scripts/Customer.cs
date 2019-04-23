@@ -14,6 +14,8 @@ public class Customer : MonoBehaviour
     #region Public properties
     public GameObject ProgressBar;
     public List<Vegetable> CustomerRequestedVeg { get; set; }
+    public float _lifeTime { get; set; }
+
     #endregion
     #region protected properties
     #endregion
@@ -24,11 +26,12 @@ public class Customer : MonoBehaviour
     private void Awake()
     {
         UIRoot = GameObject.FindGameObjectWithTag("UIRoot");
+        _lifeTime = 30;
     }
     // Start is called before the first frame update
     void Start()
     {
-      
+       
     }
 
     // Update is called once per frame
@@ -55,7 +58,7 @@ public class Customer : MonoBehaviour
        _progressBar.transform.SetParent(UIRoot.transform);
        _progressBar.transform.position = SaladChefHelper.GetScreenPosition(pos.position.x, pos.position.y+1.5f);
         ProgressBarController pc = _progressBar.GetComponent<ProgressBarController>();
-        pc.Init(40, () => {
+        pc.Init(_lifeTime, () => {
 
             _timeCompletedHandler();
         });

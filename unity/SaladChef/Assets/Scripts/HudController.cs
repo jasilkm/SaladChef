@@ -54,15 +54,31 @@ public class HudController : MonoBehaviour
 
     }
 
-    public void UpdatePlayeOneScore(int score)
+    public void UpdatePlayerScore(int score,int playerId)
     {
-        _playerOneScore.text = score.ToString(); 
+        if (playerId == 1)
+        {
+            var currentScore = Convert.ToInt32(score); ;
+            currentScore += score;
+            if (currentScore > 0)
+                _playerOneScore.text = currentScore.ToString();
+            else
+                _playerOneScore.text = 0.ToString();
+        }
+        else if (playerId == 2)
+        {
+            var currentScore = Convert.ToInt32(score);
+            currentScore += score;
+
+            if (currentScore > 0)
+                _playerTwoScore.text = currentScore.ToString();
+            else
+                _playerTwoScore.text = 0.ToString();
+        }
+    
     }
 
-    public void UpdatePlayeTwoScore(int score)
-    {
-        _playerOneScore.text = score.ToString();
-    }
+   
 
     public void UpdatePlayersCollectedVeg(Sprite veg, int playerID)
     {
@@ -79,7 +95,7 @@ public class HudController : MonoBehaviour
             _playerTwoList.Add(vegObject);
         }
 
-        vegObject.GetComponent<RectTransform>().localScale = new Vector3 (0.6f,0.6f,0.6f);
+        vegObject.GetComponent<RectTransform>().localScale = new Vector3 (0.5f,0.5f,0.5f);
         vegObject.SetActive(true);
     }
     /// <summary>

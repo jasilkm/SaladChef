@@ -16,12 +16,12 @@ public class ProgressBarController : MonoBehaviour
     #endregion
 
     #region public properties
+    public float scaleFactor { get; set; }
     public Image VegSprite;
     #endregion
     #region protected properties
     #endregion
-    #region private methods
-    #endregion
+
 
     #region Unity Methods
     // Start is called before the first frame update
@@ -54,6 +54,7 @@ public class ProgressBarController : MonoBehaviour
         _isProgressable = true;
         _requiredTime = requiredTime;
         _elapsedTime = 0.0f;
+        scaleFactor = 0.0001f;
         _progressCompletedhandler = progressCompletedhandler;
     }
     public void RemoveProgressBar()

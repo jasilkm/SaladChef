@@ -37,14 +37,7 @@ public class GameController : MonoBehaviour
         playerMasterController.EnablePlayers();
         customerController.GenerateCustomers((score, playerid) => {
 
-            if (playerid == 1)
-            {
-                hudController.UpdatePlayeOneScore(score);
-            }
-            else if (playerid == 2)
-            {
-                hudController.UpdatePlayeTwoScore(score);
-            }
+            hudController.UpdatePlayerScore(score, playerid);
 
         });
     }

@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     private int maxVegeCanCollect = 2; // max vegetables can collect from table 
     private bool _isActive = false; // when this bool is true Player movement restricted
     private bool _isSlice = false;
+    private int _trashMinusScore = -10;
     #endregion
 
     #region public properties
@@ -129,18 +130,19 @@ public class PlayerController : MonoBehaviour
                     servePlateController.AddSlicesToPlayer(this.transform,other.gameObject);
                     break;
                 }
-            case "customer":
+            case "trash":
                 {
-
-                   /* var customerRquested = other.gameObject.GetComponent<Customer>().CustomerRequestedVeg;
-                    vegetablesController.CompareVegetables(this.PickedVegetables, customerRquested,(isSuccess)=> {
-                        RemoveVegetable();
-                        hudController.ClearCollectedVeg(PlayerID);
-                        if (isSuccess)
+                    if (SlicedVegetables.Count > 0)
+                    {
+                        foreach (var item in SlicedVegetables)
                         {
-
+                            Destroy(item.gameObject);
                         }
-                    });*/
+                        SlicedVegetables.Clear();
+                        hudController.ClearCollectedVeg(this.PlayerID);
+                        hudController.UpdatePlayerScore(_trashMinusScore,this.PlayerID);
+                    }
+                   
                     break;
                 }
             case "waitplate":

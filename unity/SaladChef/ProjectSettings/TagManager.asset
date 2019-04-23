@@ -10,6 +10,7 @@ TagManager:
   - UIRoot
   - customer
   - waitplate
+  - trash
   layers:
   - Default
   - TransparentFX
