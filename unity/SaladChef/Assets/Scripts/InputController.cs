@@ -5,14 +5,17 @@ using UnityEngine;
 public class InputController : MonoBehaviour
 {
     private PlayerController playerController;
+   
+
     // Start is called before the first frame update
     void Start()
     {
         playerController = this.GetComponent<PlayerController>();
-    }
+
+          }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         float movementX = Input.GetAxis("MovementX");
         float movementY = Input.GetAxis("MovementY");

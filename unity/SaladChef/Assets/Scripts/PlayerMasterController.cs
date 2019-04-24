@@ -60,9 +60,18 @@ public class PlayerMasterController : MonoBehaviour
         Player2.EnablePlayer();
     }
 
-    public void DisablePlayers()
+    public void DisablePlayers(int playerID)
     {
-        Player1.DisablePlayer();
-        Player2.DisablePlayer();
+
+        if (playerID == 1)
+        {
+            Player1.DisablePlayer();
+        }
+        else
+        {
+            Player2.DisablePlayer();
+        }
+
+
     }
 }

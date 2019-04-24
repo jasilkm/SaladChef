@@ -42,16 +42,20 @@ public class Customer : MonoBehaviour
     #endregion
 
     #region private Methods
-
+    /// <summary>
+    /// This will trigger when player deliver salad to customer 
+    /// </summary>
+    /// <param name="other"></param>
     private void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "Player")
+        if (other.tag == "Player")
         {
             PlayerController player = other.gameObject.GetComponent<PlayerController>();
-            _playerHitted(CustomerRequestedVeg, player.SlicedVegetables,player,this);
+            _playerHitted(CustomerRequestedVeg, player.SlicedVegetables, player, this);
         }
     }
 
+    // customer wating time progressbar
     private void CreateProgressBar(Transform pos)
     {
         _progressBar =  Instantiate(ProgressBar);
@@ -65,12 +69,13 @@ public class Customer : MonoBehaviour
     }
     #endregion
     #region public  Methods
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="veg"></param>
-    /// <param name="pos"></param>
-    /// <param name="timeCompletedHandler"></param>
+ /// <summary>
+ /// Initialization for Customer. It has call back Action for comapre  Player picked itmes and Customer Request Items. Call back method will recive by customermaincontroller
+ /// </summary>
+ /// <param name="veg"> List of vegitable </param>
+ /// <param name="pos"></param>
+ /// <param name="timeCompletedHandler"></param>
+ /// <param name="playerHitted"></param>
     public void Init(List<Vegetable> veg,Transform pos, Action timeCompletedHandler, Action<List<Vegetable>, List<Vegetable>,PlayerController,Customer> playerHitted)
     {
         _playerHitted= playerHitted;

@@ -18,6 +18,10 @@ public static class SaladChefHelper
     {
         return Camera.main.WorldToScreenPoint(new Vector3(xPos, yPos, 0));
     }
+    public static Vector3 GetWorldPosition(float xPos, float yPos)
+    {
+        return Camera.main.ScreenToWorldPoint(new Vector3(xPos, yPos, 0));
+    }
 
     public static int[] Shuffle(int[] a)
     {
@@ -38,5 +42,17 @@ public static class SaladChefHelper
      
 
         return a;
+    }
+
+    private static Camera GetCamera()
+    {
+        Camera camera = Camera.main;
+
+        if (camera == null)
+        {
+            camera = GameObject.Find("MainCamera").GetComponent<Camera>();
+            Debug.Log(camera);
+        }
+        return camera;
     }
 }

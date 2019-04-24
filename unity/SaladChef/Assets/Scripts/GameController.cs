@@ -12,6 +12,8 @@ public class GameController : MonoBehaviour
     public CustomerController customerController;
     public VegetablesController vegetablesController;
     public HudController hudController;
+    public TimerController timerController;
+    public GameOverController gameOverController;
     #endregion
     #region protected properties
     #endregion
@@ -22,6 +24,9 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
+        timerController.PlayerTimeCompleted += new EventHandler<TImeCompletedEventArgs>(TimerController_TimeCompleted);
+        timerController.GameCompleted += new EventHandler<GameOverEventArgs>(TimerController_GameCompleted);
+        gameOverController.GameRestarted += new EventHandler<EventArgs>(GameOverController_GameRestarted);
         StartGame();
     }
 
@@ -35,6 +40,7 @@ public class GameController : MonoBehaviour
     public void StartGame()
     {
         playerMasterController.EnablePlayers();
+        hudController.Init();
         customerController.GenerateCustomers((score, playerid) => {
 
             hudController.UpdatePlayerScore(score, playerid);
@@ -54,4 +60,28 @@ public class GameController : MonoBehaviour
 
     #region protected methods
     #endregion
+
+    void TimerController_TimeCompleted(object sender, TImeCompletedEventArgs e)
+    {
+        playerMasterController.DisablePlayers(e.PlayerId);
+
+    }
+
+    void TimerController_GameCompleted (object sender, GameOverEventArgs args)
+    {
+        hudController.GetWinnerScoreAndPlayer((player,score)=> {
+
+            gameOverController.Show(player.ToString(), score);
+            customerController.StopSpawning();
+        });
+
+    }
+
+    void GameOverController_GameRestarted(object sender, EventArgs args)
+    {
+        hudController.ResetGame();
+        StartGame();
+    }
+
+
 }

@@ -9,6 +9,8 @@ public class VegetablesController : MonoBehaviour
     [SerializeField] private Vegetable[] _vegitables; // vegitable Object
     [SerializeField] private Transform[] _spwanPoints; // Spwaning points for Vegitable
     [SerializeField] private GameObject _progressbar;
+    [SerializeField] private Transform _uiRoot;
+    [SerializeField] private float _sliceDuration = 4;
 
     private Vegetable SlicedVeg;
     private int[] _randomNumber = new int[] { 0,1,2,3,4,5};
@@ -63,11 +65,14 @@ public class VegetablesController : MonoBehaviour
         //Debug.Log(""+ cutTable.GetComponent<ChopPad>().ChopPadID);
         int vegOrder = 0;
         PlaceVegetablesOnChopboard(veg[vegOrder], cutTable);
-        GameObject progressbar = Instantiate(_progressbar, cutTable);
+        GameObject progressbar = Instantiate(_progressbar);
+        progressbar.transform.SetParent(_uiRoot);
+       progressbar.transform.position = SaladChefHelper.GetScreenPosition(cutTable.position.x, cutTable.position.y +.75f);
+
         ProgressBarController progressBarController = progressbar.GetComponent<ProgressBarController>();
         int totalVegCount = veg.Count - 1;
 
-           progressBarController.Init(veg[vegOrder].VegetableSprite, 5, () =>
+           progressBarController.Init(veg[vegOrder].VegetableSprite, _sliceDuration, () =>
             {
                 if (totalVegCount == vegOrder)
                 {

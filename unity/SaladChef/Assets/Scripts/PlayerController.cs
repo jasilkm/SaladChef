@@ -2,15 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System;
 public class PlayerController : MonoBehaviour
 {
     #region private properties
-    [SerializeField] private float _speed = 0.4f; // player  
+      
     private VegetablesController vegetablesController;
     private int maxVegeCanCollect = 2; // max vegetables can collect from table 
     private bool _isActive = false; // when this bool is true Player movement restricted
-    private bool _isSlice = false;
     private int _trashMinusScore = -10;
+
     #endregion
 
     #region public properties
@@ -18,6 +19,8 @@ public class PlayerController : MonoBehaviour
     public List<Vegetable> SlicedVegetables = new List<Vegetable>();
     public HudController hudController;
     public int PlayerID; // Player id 
+    public float Speed = 12f; // Player Movement SPeed
+    public bool _isSliceAdded = false;
 
     #endregion
 
@@ -30,6 +33,8 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         vegetablesController = GameObject.FindObjectOfType<VegetablesController>();
+
+
     }
 
     // Update is called once per frame
@@ -59,13 +64,21 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     public void Move(float xMove, float yMove, float xMove1, float yMove1)
     {
+        //Debug.Log(String.Format("{000000:0000.00000}", xMove));
         if (PlayerID == 1)
         {
             if (!_isActive)
             {
-                Vector2 movementPlayer = new Vector2(xMove, yMove);
-                movementPlayer *= _speed;
-                this.transform.Translate(movementPlayer);
+                // Vector2 movementPlayer = new Vector2(xMove, yMove);
+                // movementPlayer *= _speed;
+                //this.transform.Translate(movementPlayer);
+
+                xMove = xMove * Speed * Time.deltaTime;
+                yMove = yMove * Speed * Time.deltaTime;
+                Vector3 pos = transform.localPosition;
+                pos.x = Mathf.Clamp(pos.x + xMove, -5.7f, 5.7f);
+                pos.y = Mathf.Clamp(pos.y + yMove, -2.87f, 2.87f);
+                transform.localPosition = pos;
             }
            
         }
@@ -73,9 +86,14 @@ public class PlayerController : MonoBehaviour
         {
             if (!_isActive)
             {
-                Vector2 movementPlayer = new Vector2(xMove1, yMove1);
-                movementPlayer *= _speed;
-                this.transform.Translate(movementPlayer);
+                xMove1 = xMove1 * Speed * Time.deltaTime;
+                yMove1 = yMove1 * Speed * Time.deltaTime;
+                Vector3 pos = transform.localPosition;
+                pos.x = Mathf.Clamp(pos.x + xMove1, -5.7f, 5.7f);
+                pos.y = Mathf.Clamp(pos.y + yMove1, -2.87f, 2.87f);
+
+                //Debug.Log(pos);
+                transform.localPosition = pos;
             }
         }
 
@@ -93,6 +111,7 @@ public class PlayerController : MonoBehaviour
         {
             case "vegbasket":
                 {
+                    if (_isSliceAdded) return;
                     Vegetable veg = other.GetComponentInChildren<Vegetable>();
                     if (PickedVegetables.Count != maxVegeCanCollect)
                     {
@@ -107,6 +126,9 @@ public class PlayerController : MonoBehaviour
                 }
             case "vegcutter":
                 {
+
+                    ChopPad chopPad = other.GetComponent<ChopPad>();
+                    if (chopPad.ChopPadID != PlayerID) return;
                     if (PickedVegetables.Count > 0)
                     {
                         _isActive = true;
@@ -125,6 +147,8 @@ public class PlayerController : MonoBehaviour
                 }
             case "serveplate":
                 {
+                    SlicePlate slicePlate = other.GetComponent<SlicePlate>();
+                    if (slicePlate.SlicePlateId != PlayerID) return;
                     //Debug.Log("Serve plate detected"+ this);
                     ServePlateController servePlateController = GameObject.FindObjectOfType<ServePlateController>();
                     servePlateController.AddSlicesToPlayer(this.transform,other.gameObject);
@@ -141,6 +165,7 @@ public class PlayerController : MonoBehaviour
                         SlicedVegetables.Clear();
                         hudController.ClearCollectedVeg(this.PlayerID);
                         hudController.UpdatePlayerScore(_trashMinusScore,this.PlayerID);
+                        _isSliceAdded = false;
                     }
                    
                     break;
@@ -198,10 +223,12 @@ public class PlayerController : MonoBehaviour
     #endregion
     #region protected methods
     #endregion
-
-
-
-
+    
 
 }
 
+public enum Players
+{
+    player1 = 1,
+    player2 = 2
+}

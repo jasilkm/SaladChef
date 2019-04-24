@@ -14,7 +14,8 @@ public class HudController : MonoBehaviour
     [SerializeField] private HorizontalLayoutGroup PlayerTwoVegCollected;
     private List<GameObject> _playerOneList;
     private List<GameObject> _playerTwoList;
-
+    private Action<int, int> _gameCompleted;
+    [SerializeField] private TimerController _timerController;
 
     #endregion
     #region public properties
@@ -49,9 +50,16 @@ public class HudController : MonoBehaviour
 
     #region public methods
 
-    public void Init(Action timerCompletedHandler)
+    public void Init()
     {
+        _timerController.StartTimer();
+    }
 
+    public void ResetGame()
+    {
+        _playerOneTime.text = "0";
+        _playerTwoScore.text = "0";
+        _timerController.ResetGame();
     }
 
     public void UpdatePlayerScore(int score,int playerId)
@@ -96,6 +104,7 @@ public class HudController : MonoBehaviour
         }
 
         vegObject.GetComponent<RectTransform>().localScale = new Vector3 (0.5f,0.5f,0.5f);
+       // vegObject.GetComponent<RectTransform>().localPosition = Vector3.zero;
         vegObject.SetActive(true);
     }
     /// <summary>
@@ -124,10 +133,29 @@ public class HudController : MonoBehaviour
     }
 
 
-    public void UpdatePlayerTwoCollectedVeg()
+    public void GetWinnerScoreAndPlayer(Action <Players, int> gamescoreAndWinner)
     {
-
+        int playerOneScore = 0;
+        int playerTwoScore = 0;
+        int.TryParse(_playerOneScore.ToString(), out playerOneScore);
+        int.TryParse(_playerTwoScore.ToString(), out playerTwoScore);
+        //    Players player = playerOneScore > playerTwoScore ? Players.player1 : Players.player2;
+        if (playerOneScore> playerTwoScore)
+              gamescoreAndWinner(Players.player1, playerOneScore);
+        else if (playerTwoScore > playerOneScore)
+            gamescoreAndWinner(Players.player2, playerTwoScore);
+        else
+            gamescoreAndWinner(Players.player1, 0);
     }
+
+    public void UpdateBonusTime(int player,float time)
+    {
+        if ((int)player == 1)
+            _timerController.PlayerOneGameTime += time;
+        else if ((int)player == 2)
+            _timerController.PlayerTwoGameTime += time;
+    } 
+        
 
     #endregion
     #region protected methods

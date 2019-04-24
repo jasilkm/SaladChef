@@ -44,6 +44,7 @@ public class ProgressBarController : MonoBehaviour
         _elapsedTime = 0;
         _requiredTime = requiredTime;
         _isProgressable = true;
+        VegSprite.gameObject.SetActive(true);
         VegSprite.sprite = vegSprite;
         _progressCompletedhandler = progressCompletedhandler;
     }
@@ -76,6 +77,7 @@ public class ProgressBarController : MonoBehaviour
 
     private void UpdateProgressBar()
     {
+       
         _elapsedTime += Time.deltaTime;
         _progressImage.fillAmount = SaladChefHelper.NormalizedValue(_elapsedTime, 0, _requiredTime, 0, 1);
 

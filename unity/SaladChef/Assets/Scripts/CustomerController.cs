@@ -14,7 +14,10 @@ public class CustomerController : MonoBehaviour
     [SerializeField] private Transform[] spwanPoints;
     private Customer _customer;
     private Action<int, int> _compareCompletedHandler;
+    [SerializeField] private HudController hudController;
     private Coroutine _coroutine;
+    private List<Customer> _spawnedList;
+    private float _bonusScore = 20;
     #endregion
 
     #region Public properties
@@ -81,6 +84,9 @@ public class CustomerController : MonoBehaviour
             _compareCompletedHandler(sum, _playerController.PlayerID);
             _customer.Destroy();
             _playerController.RemoveVegetable();
+            _playerController._isSliceAdded = false;
+            hudController.ClearCollectedVeg(_playerController.PlayerID);
+            hudController.UpdateBonusTime(_playerController.PlayerID,_bonusScore);
         }
     }
 
@@ -88,11 +94,19 @@ public class CustomerController : MonoBehaviour
     {
 
         StopCoroutine(_coroutine);
+        DestoryCustomers();
     }
+    /// <summary>
+    /// Generate customers in random time
+    /// </summary>
+    /// <param name="compareCompletedHandler"></param>
     public void GenerateCustomers(Action<int,int> compareCompletedHandler)
     {
+        _spawnedList = new List<Customer>();
         _compareCompletedHandler = compareCompletedHandler;
-        _coroutine =  StartCoroutine("SpawnRandomCustomer");
+      //  _coroutine = SpawnRandomCustomer();
+        _coroutine = StartCoroutine(SpawnRandomCustomer());
+       
     }
 
     IEnumerator SpawnRandomCustomer()
@@ -103,6 +117,7 @@ public class CustomerController : MonoBehaviour
             CustomerSpwan cs = list[UnityEngine.Random.Range(0, list.Count)];
             cs._isSpwaned = true;
            Customer cus = Instantiate(customer, cs.customerSpwanPoint);
+            _spawnedList.Add(cus);
             var vegList = vegetablesController.GenerateCustomersSaladIngrediants();
             cus.Init(vegList,cs.customerSpwanPoint,
                 ()=> {
@@ -112,11 +127,12 @@ public class CustomerController : MonoBehaviour
                    (customerRequested, playerGiven, playerController,cust)=> {
                      _customer = cust;
                     _playerController = playerController;
+                   
                     CompareVegetables(customerRequested, playerGiven);
             });
         }
         yield return new WaitForSeconds(UnityEngine.Random.Range(_minTime,_maxTime));
-        StartCoroutine("SpawnRandomCustomer");
+        _coroutine = StartCoroutine(SpawnRandomCustomer());
     }
 
     #endregion
@@ -133,6 +149,15 @@ public class CustomerController : MonoBehaviour
             cs._isSpwaned = false;
             customerSpwanPonts.Add(cs);
             }
+    }
+
+    // Destory customer when Game Over
+    private void DestoryCustomers()
+    {
+        foreach (var item in _spawnedList)
+        {
+            item.Destroy();
+        }
     }
 
     #endregion

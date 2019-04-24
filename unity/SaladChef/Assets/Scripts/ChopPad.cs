@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ChopPad : MonoBehaviour
 {
-    public int ChopPadID;
+    
+    public int ChopPadID; // Chop pad id 
     public string ChopPadName;
 }

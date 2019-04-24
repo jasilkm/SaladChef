@@ -54,9 +54,12 @@ public class ServePlateController : MonoBehaviour
         foreach (var item in veg)
         {
             item.GetComponent<Transform>().SetParent(player);
-        }
+            item.GetComponent<Transform>().localPosition = new Vector3(0,0,-1);
 
-      //  Vegetable[] obj = this.GetComponentsInChildren<Vegetable>();
+
+        }
+        player.GetComponent<PlayerController>()._isSliceAdded = true;
+        //  Vegetable[] obj = this.GetComponentsInChildren<Vegetable>();
 
     }
 

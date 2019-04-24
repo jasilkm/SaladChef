@@ -2,51 +2,140 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-public class TimerController:MonoBehaviour
+using UnityEngine.UI;
+public class TimerController : MonoBehaviour
 {
-    #region private properties
-    [SerializeField] private float _requiredTime;
-    private float elapsedTime;
+    #region public properties
+    public float PlayerOneGameTime { get; set; }
+    public float PlayerTwoGameTime { get; set; }
+    public bool IsGamePlaying { get; set; }
+
+
+    public Text PlayerOneText;
+    public Text PlayerTwoText;
+
     #endregion
     #region protected properties
+    public event EventHandler<TImeCompletedEventArgs> PlayerTimeCompleted;
+    public event EventHandler<GameOverEventArgs> GameCompleted;
+
+
     #endregion
     #region private methods
+    private float elapsedTime;
+    private float _playerUsedTime = 0;
+    
     #endregion
 
     #region unity methods
 
-     void Start()
+    void Start()
     {
-        
+
     }
 
-     void Update()
+    void Update()
     {
-        UpdateTimer();
     }
     #endregion
 
 
     #region public methods
-
-    public void Init(Action timerCompletedHandler)
+    public void StartTimer()
     {
-
+        PlayerOneGameTime = 100;
+        PlayerTwoGameTime = 100;
+        IsGamePlaying = true;
+        StartCoroutine("CountDown");
     }
-   
 
-    private void UpdateTimer()
+    // Count Down
+    IEnumerator CountDown()
     {
-        elapsedTime += Time.deltaTime;
-
-        if (elapsedTime >= _requiredTime)
+        if (IsGamePlaying)
         {
+            while (PlayerOneGameTime > 0)
+            {
+                yield return new WaitForSeconds(1);
+                PlayerOneGameTime--;
+                PlayerTwoGameTime--;
+                PlayerOneText.text = PlayerOneGameTime.ToString();
+                PlayerTwoText.text = PlayerTwoGameTime.ToString();
 
+                if (PlayerOneGameTime <= 0)
+                {
+                    OnTimeCompleted((int)Players.player1);
+                }
+
+                if (PlayerTwoGameTime <= 0)
+                {
+                    OnTimeCompleted((int)Players.player2);
+                }
+
+                if (PlayerOneGameTime == 0 && PlayerTwoGameTime == 0)
+
+                    
+                      OnGameOver();
+
+            }
+
+            while (PlayerTwoGameTime > 0)
+            {
+                yield return new WaitForSeconds(1);
+                PlayerTwoGameTime--;
+                PlayerTwoText.text = PlayerTwoGameTime.ToString();
+
+               
+
+                if (PlayerTwoGameTime <= 0)
+                {
+                    OnTimeCompleted((int)Players.player2);
+                }
+
+                if (PlayerOneGameTime == 0 && PlayerTwoGameTime == 0)
+
+
+                    OnGameOver();
+
+            }
         }
     }
 
+    public void ResetGame()
+    {
+        PlayerOneGameTime = 300;
+        PlayerTwoGameTime = 300;
+    }
+
     #endregion
-    #region protected methods
+    #region protected  methods
+    protected void OnTimeCompleted(int PlayerId)
+    {
+        TImeCompletedEventArgs args = new TImeCompletedEventArgs();
+        if (PlayerTimeCompleted != null)
+        {
+            args.PlayerId = PlayerId;
+            PlayerTimeCompleted(this, args);
+        }
+    }
+    protected void OnGameOver()
+    {
+        GameOverEventArgs args = new GameOverEventArgs();
+        GameCompleted?.Invoke(this, args);
+    }
+
     #endregion
 
+}
+
+
+public class TImeCompletedEventArgs : System.EventArgs
+{
+    public int PlayerId { get; set; }
+}
+
+public class GameOverEventArgs : System.EventArgs
+{
+    public int PlayerId { get; set; }
+    public int Score { get; set; }
 }
