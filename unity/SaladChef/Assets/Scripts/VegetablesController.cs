@@ -64,29 +64,40 @@ public class VegetablesController : MonoBehaviour
     {
         //Debug.Log(""+ cutTable.GetComponent<ChopPad>().ChopPadID);
         int vegOrder = 0;
+        // placing player collected veg to chop pad for slicing
         PlaceVegetablesOnChopboard(veg[vegOrder], cutTable);
+        // creating progress bar for slice time
         GameObject progressbar = Instantiate(_progressbar);
         progressbar.transform.SetParent(_uiRoot);
+        // getting scree postion for progress bar
        progressbar.transform.position = SaladChefHelper.GetScreenPosition(cutTable.position.x, cutTable.position.y +.75f);
 
         ProgressBarController progressBarController = progressbar.GetComponent<ProgressBarController>();
         int totalVegCount = veg.Count - 1;
-
+        // initialize progressbar  args passing slicing vef g and slice time
            progressBarController.Init(veg[vegOrder].VegetableSprite, _sliceDuration, () =>
             {
+                // when player completed  slicing
                 if (totalVegCount == vegOrder)
                 {
+                    // vegitable status changing to slice 
                     SlicedVeg._isSliced = true;
+                    // this action will give call back to player so he can add own list to slice
                     slicedVeg(SlicedVeg);
+                    // adding sliced veg to serveplate so user can make diffrenr combination
                     ServePlateController.AddSlicesToServePlate(SlicedVeg, cutTable.GetComponent<ChopPad>().ChopPadID);
                     vegOrder = 0;
+                    // slice completed hander  let know player so he can again start o move
                     slicingCompleteHandler();
+                   // remove progressbar
                     progressBarController.RemoveProgressBar();
 
                 }
                 else
                 {
                    ServePlateController.AddSlicesToServePlate(SlicedVeg, cutTable.GetComponent<ChopPad>().ChopPadID);
+
+                    // slicing Next veg if available
                     vegOrder++;
                     SlicedVeg._isSliced = true;
                     slicedVeg(SlicedVeg);
@@ -101,6 +112,7 @@ public class VegetablesController : MonoBehaviour
     /// <returns> list of vegtables/  two or three</returns>
     public List<Vegetable> GenerateCustomersSaladIngrediants()
     {
+        // creating random combination
         _randomNumber = SaladChefHelper.Shuffle(_randomNumber);
 
         List<Vegetable> cl= new List<Vegetable>();

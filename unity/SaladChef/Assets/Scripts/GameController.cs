@@ -24,8 +24,11 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
+        // the evenrt will receive when a player timer reached 0 so his movemnet will restricted
         timerController.PlayerTimeCompleted += new EventHandler<TImeCompletedEventArgs>(TimerController_TimeCompleted);
+        // when both player time has completed
         timerController.GameCompleted += new EventHandler<GameOverEventArgs>(TimerController_GameCompleted);
+        // player restrated gamefrom game over screen
         gameOverController.GameRestarted += new EventHandler<EventArgs>(GameOverController_GameRestarted);
         StartGame();
     }
@@ -39,8 +42,11 @@ public class GameController : MonoBehaviour
     #region public methods
     public void StartGame()
     {
+        // enable the player
         playerMasterController.EnablePlayers();
+        // initiliazing hud
         hudController.Init();
+        // generating customer and the call back will update user score
         customerController.GenerateCustomers((score, playerid) => {
 
             hudController.UpdatePlayerScore(score, playerid);

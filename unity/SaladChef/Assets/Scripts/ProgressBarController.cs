@@ -9,15 +9,18 @@ public class ProgressBarController : MonoBehaviour
     #region private properties
     [SerializeField] private Image _progressImage;
     private float _elapsedTime;
-    private float _requiredTime;
     private Action _progressCompletedhandler;
     private bool _isProgressable = false;
+    private float _requiredTime { get; set; }
+    public float TimeIncreceFactor { get; set; }
+
 
     #endregion
 
     #region public properties
     public float scaleFactor { get; set; }
     public Image VegSprite;
+
     #endregion
     #region protected properties
     #endregion
@@ -64,6 +67,8 @@ public class ProgressBarController : MonoBehaviour
         
     }
 
+    
+
 
     public void ResetProgress(Sprite vegSprite)
     {
@@ -77,8 +82,8 @@ public class ProgressBarController : MonoBehaviour
 
     private void UpdateProgressBar()
     {
-       
-        _elapsedTime += Time.deltaTime;
+
+        _elapsedTime += (Time.deltaTime + TimeIncreceFactor) ;
         _progressImage.fillAmount = SaladChefHelper.NormalizedValue(_elapsedTime, 0, _requiredTime, 0, 1);
 
         if (_progressImage.fillAmount >= 1) {

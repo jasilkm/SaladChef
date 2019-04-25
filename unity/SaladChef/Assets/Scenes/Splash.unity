@@ -264,9 +264,9 @@ MonoBehaviour:
   m_Text: 'Player 2 Navigation
 
 
-    alphabet j and l for Horizontal
+    Key j and l for Horizontal
 
-    alphabet i and k for Vertical'
+    Key i and k for Vertical'
 --- !u!222 &254487668
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -348,9 +348,9 @@ MonoBehaviour:
   m_Text: 'Player 1 Navigation
 
 
-    alphabet a and d for Horizontal
+    Key a and d for Horizontal
 
-    alphabet w and s for Vertical'
+    Key w and s for Vertical'
 --- !u!222 &379291090
 CanvasRenderer:
   m_ObjectHideFlags: 0

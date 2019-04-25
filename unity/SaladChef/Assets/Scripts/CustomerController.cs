@@ -6,18 +6,18 @@ using System;
 public class CustomerController : MonoBehaviour
 {
     #region Private properties
-    [SerializeField] private Customer customer;
-    private readonly int _maxCustomerToSpwan = 4;
-    private float _minTime = 3f;
-    private float _maxTime = 10.0f;
+    [SerializeField] private Customer customer; // Customer Object Reference
+    private float _minTime = 3f; // min time for spwan
+    private float _maxTime = 10.0f; // max time for spwan
     private PlayerController _playerController { get; set; }
-    [SerializeField] private Transform[] spwanPoints;
+    [SerializeField] private Transform[] spwanPoints; // spwan points reference
     private Customer _customer;
-    private Action<int, int> _compareCompletedHandler;
+    private Action<int, int> _compareCompletedHandler; // comapre  completed handeler 
     [SerializeField] private HudController hudController;
     private Coroutine _coroutine;
     private List<Customer> _spawnedList;
-    private float _bonusScore = 20;
+    private float _bonusTime = 20; // When  a correct combination  has give will eligibale to get a Bonus time
+    private int _finedScore = -10; // When a wrong combination has given will lead to minus score
     #endregion
 
     #region Public properties
@@ -54,42 +54,57 @@ public class CustomerController : MonoBehaviour
     {
         List<int> pp = new List<int>();
         List<int> cr = new List<int>();
-
+        // sald ingerdiant converting to int formate will help for easy comparison
         foreach (var item in playerPickedVeg)
         {
             pp.Add((int)item.saladIngredients);
         }
 
+        // sald ingerdiant converting to int formate will help for easy comparison
         foreach (var item in consumerRequestedVeg)
         {
             cr.Add((int)item.saladIngredients);
-            Debug.Log("item :"+ item.winPoints);
+          //  Debug.Log("item :"+ item.winPoints);
         }
+        // Quesry for comparing   customer requested and player provided
         IEnumerable<int> differenceQuery = pp.Except(cr);
 
         foreach (int s in differenceQuery)
             Debug.Log("Not Matched" + (SaladIngredients)s);
 
+        // if difference > 0 means  requested and given is not matching this will led to minus score
         if (differenceQuery.Count() > 0)
         {
-            _compareCompletedHandler(0,_playerController.PlayerID);
+            _compareCompletedHandler(_finedScore, _playerController.PlayerID);
+
+            // wrong combination led to half of life customer
+            _customer.UpdateTime();
             //completedHandler(false);
-            var sum = consumerRequestedVeg.Sum(x => x.winPoints);
-            _compareCompletedHandler(-sum, _playerController.PlayerID);
+            //   var sum = consumerRequestedVeg.Sum(x => x.winPoints);
+            //   _compareCompletedHandler(-sum, _playerController.PlayerID);
 
         }
         else
         {
+            // getting sum of Winpoints want to awareded for player
             var sum = consumerRequestedVeg.Sum(x => x.winPoints);
+            //sending compare result to Game controller
             _compareCompletedHandler(sum, _playerController.PlayerID);
+            // removing customer from screen
             _customer.Destroy();
+            // removing veg from player 
             _playerController.RemoveVegetable();
+            // this will make sure player grab next set of veg
             _playerController._isSliceAdded = false;
+            // clearing veg list from hud
             hudController.ClearCollectedVeg(_playerController.PlayerID);
-            hudController.UpdateBonusTime(_playerController.PlayerID,_bonusScore);
+            // releasing bonus time to player will add his total time
+            hudController.UpdateBonusTime(_playerController.PlayerID,_bonusTime);
         }
     }
-
+    /// <summary>
+    /// stop spawing and Removing exsiting customers from screen
+    /// </summary>
     public void StopSpawning()
     {
 
@@ -111,26 +126,36 @@ public class CustomerController : MonoBehaviour
 
     IEnumerator SpawnRandomCustomer()
     {
+        // make sure there is no customer spwned on specified loacation
         var list = customerSpwanPonts.Where(x => x._isSpwaned == false).ToList<CustomerSpwan>();
         if (list.Count > 0)
         {
+            // getting spawan point from random position
             CustomerSpwan cs = list[UnityEngine.Random.Range(0, list.Count)];
+            // makesure respected spwan point occupaid by a customer so there wont be a overlap
             cs._isSpwaned = true;
+            // insatiate customer in screen
            Customer cus = Instantiate(customer, cs.customerSpwanPoint);
+            // adding spwaned customer to list this use for delete the objects later
             _spawnedList.Add(cus);
+            // creating customer request combination 
             var vegList = vegetablesController.GenerateCustomersSaladIngrediants();
+            // initialize  customer and start progressbar also passing his  requeset veg list and his spawing position
+           
             cus.Init(vegList,cs.customerSpwanPoint,
                 ()=> {
+                    // if  time has finished Action call back will trigger and it will delete 
                     cs._isSpwaned = false;
                    cus.Destroy();
                 },
-                   (customerRequested, playerGiven, playerController,cust)=> {
+                   (customerRequested, playerGiven, playerController,cust)=> {  /// this arguents will recive from customer such as customer requested, player has given to customer 
                      _customer = cust;
                     _playerController = playerController;
                    
                     CompareVegetables(customerRequested, playerGiven);
             });
         }
+        // creating customer in random time
         yield return new WaitForSeconds(UnityEngine.Random.Range(_minTime,_maxTime));
         _coroutine = StartCoroutine(SpawnRandomCustomer());
     }

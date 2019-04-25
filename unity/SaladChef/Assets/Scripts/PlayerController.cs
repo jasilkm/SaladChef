@@ -60,7 +60,7 @@ public class PlayerController : MonoBehaviour
     }
 
     /// <summary>
-    /// 
+    /// Player movement value will recive from Input controller
     /// </summary>
     public void Move(float xMove, float yMove, float xMove1, float yMove1)
     {
@@ -76,6 +76,7 @@ public class PlayerController : MonoBehaviour
                 xMove = xMove * Speed * Time.deltaTime;
                 yMove = yMove * Speed * Time.deltaTime;
                 Vector3 pos = transform.localPosition;
+                //clamping position to desired area 
                 pos.x = Mathf.Clamp(pos.x + xMove, -5.7f, 5.7f);
                 pos.y = Mathf.Clamp(pos.y + yMove, -2.87f, 2.87f);
                 transform.localPosition = pos;
@@ -102,7 +103,7 @@ public class PlayerController : MonoBehaviour
 
     #region private methods
     /// <summary>
-    /// Player Intraction with other objects like vegtable, slicetable, trash and Customer 
+    /// Player Intraction with other objects like vegtable, slicetable, trash and Customer  based on tag
     /// </summary>
     /// <param name="other"></param>
     private void OnTriggerEnter(Collider other)
@@ -111,11 +112,16 @@ public class PlayerController : MonoBehaviour
         {
             case "vegbasket":
                 {
+                    // if sliced object carring with player will restrict to collect veg from basket
                     if (_isSliceAdded) return;
                     Vegetable veg = other.GetComponentInChildren<Vegetable>();
+                    //
+                   
                     if (PickedVegetables.Count != maxVegeCanCollect)
                     {
+                        // list updating picked vege
                         PickedVegetables.Add(veg);
+                        // updating image to hud
                         hudController.UpdatePlayersCollectedVeg(veg.VegetableSprite,this.PlayerID);
                     }
                     else
@@ -128,12 +134,15 @@ public class PlayerController : MonoBehaviour
                 {
 
                     ChopPad chopPad = other.GetComponent<ChopPad>();
+                    //chop board restcted based on the user
                     if (chopPad.ChopPadID != PlayerID) return;
+                    // can collect veg from chop pad
                     if (PickedVegetables.Count > 0)
                     {
                         _isActive = true;
                         vegetablesController.SliceVegetable(PickedVegetables, other.transform,
                             (slice) => {
+                                // this call back will recived when a vege slice has complted
                                 SlicedVegetables.Add(slice);
                             },
                             
@@ -147,6 +156,7 @@ public class PlayerController : MonoBehaviour
                 }
             case "serveplate":
                 {
+                    if (SlicedVegetables.Count == 0) return;
                     SlicePlate slicePlate = other.GetComponent<SlicePlate>();
                     if (slicePlate.SlicePlateId != PlayerID) return;
                     //Debug.Log("Serve plate detected"+ this);
@@ -156,6 +166,7 @@ public class PlayerController : MonoBehaviour
                 }
             case "trash":
                 {
+                    // combination move to trach
                     if (SlicedVegetables.Count > 0)
                     {
                         foreach (var item in SlicedVegetables)
@@ -172,10 +183,12 @@ public class PlayerController : MonoBehaviour
                 }
             case "waitplate":
                 {
+                    // adding vege to wait plate so player can collect later for combination
                     var waitplate = other.gameObject.GetComponent<WaitPlateController>();
+
+
                     if (PickedVegetables.Count > 0)
                     {
-                       
                         if (!waitplate._isFilled)
                         {
                             waitplate._isFilled = true;

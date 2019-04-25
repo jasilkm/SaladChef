@@ -5,10 +5,10 @@ using System;
 public class Customer : MonoBehaviour
 {
     #region Private properties
-    [SerializeField]private SpriteRenderer []vegetables;
-    private GameObject UIRoot;
+    [SerializeField]private SpriteRenderer []vegetables; // available vegitable sprite list
+    private GameObject UIRoot; // Ui root canvas referenc for adding Ui elements
     private Action _timeCompletedHandler;
-    private Action<List<Vegetable>, List<Vegetable>, PlayerController,Customer > _playerHitted;
+    private Action<List<Vegetable>, List<Vegetable>, PlayerController,Customer > _playerHitted; // if a player given to sald this will trigger and passing requred info to parent controller
     private GameObject _progressBar;
     #endregion
     #region Public properties
@@ -98,6 +98,12 @@ public class Customer : MonoBehaviour
         Debug.Log("destory called");
         Destroy(_progressBar);
         Destroy(this.gameObject);
+    }
+
+    public void UpdateTime()
+    {
+        ProgressBarController pb = _progressBar.GetComponent<ProgressBarController>();
+        pb.TimeIncreceFactor = 0.05f;
     }
 
     #endregion
