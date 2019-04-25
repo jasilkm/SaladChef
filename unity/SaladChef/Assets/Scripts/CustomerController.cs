@@ -8,7 +8,7 @@ public class CustomerController : MonoBehaviour
     #region Private properties
     [SerializeField] private Customer customer; // Customer Object Reference
     private float _minTime = 3f; // min time for spwan
-    private float _maxTime = 10.0f; // max time for spwan
+    private float _maxTime = 8.0f; // max time for spwan
     private PlayerController _playerController { get; set; }
     [SerializeField] private Transform[] spwanPoints; // spwan points reference
     private Customer _customer;
@@ -181,7 +181,11 @@ public class CustomerController : MonoBehaviour
     {
         foreach (var item in _spawnedList)
         {
-            item.Destroy();
+            if (item != null)
+            {
+                item.Destroy();
+            }
+            
         }
     }
 

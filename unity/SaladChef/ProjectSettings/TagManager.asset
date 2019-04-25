@@ -11,6 +11,7 @@ TagManager:
   - customer
   - waitplate
   - trash
+  - GameElementCanvas
   layers:
   - Default
   - TransparentFX

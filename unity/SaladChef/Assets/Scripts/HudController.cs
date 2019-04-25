@@ -57,8 +57,8 @@ public class HudController : MonoBehaviour
 
     public void ResetGame()
     {
-        _playerOneTime.text = "0";
-        _playerTwoScore.text = "0";
+        
+        ClearHud();
         _timerController.ResetGame();
     }
 
@@ -119,7 +119,7 @@ public class HudController : MonoBehaviour
             {
                 Destroy(obj);
             }
-            _playerTwoList.Clear();
+            _playerOneList.Clear();
         }
         else if (playerID == 2)
         {
@@ -131,6 +131,7 @@ public class HudController : MonoBehaviour
             _playerTwoList.Clear();
         }
     }
+
 
 
     public void GetWinnerScoreAndPlayer(Action <Players, int> gamescoreAndWinner)
@@ -154,9 +155,36 @@ public class HudController : MonoBehaviour
             _timerController.PlayerOneGameTime += time;
         else if ((int)player == 2)
             _timerController.PlayerTwoGameTime += time;
-    } 
-        
+    }
 
+    private void ClearHud()
+    {
+
+      
+            foreach (var obj in _playerOneList)
+            {
+            if (obj != null)
+            {
+                Destroy(obj);
+            }
+               
+            }
+           
+      
+            foreach (var obj in _playerTwoList)
+            {
+            if (obj != null)
+            {
+                Destroy(obj);
+            }
+        }
+        _playerOneList.Clear();
+        _playerTwoList.Clear();
+        _playerOneTime.text = "0";
+        _playerTwoScore.text = "0";
+
+
+    }
     #endregion
     #region protected methods
     #endregion

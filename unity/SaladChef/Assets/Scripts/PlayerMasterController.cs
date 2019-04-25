@@ -72,6 +72,17 @@ public class PlayerMasterController : MonoBehaviour
             Player2.DisablePlayer();
         }
 
+    }
 
+    public void ResetPlayer()
+    {
+        Player1.EnablePlayer();
+        Player2.EnablePlayer();
+        Player1.RemoveVegetable();
+        Player2.RemoveVegetable();
+        Player1.RemoveSlicedVegetables();
+        Player2.RemoveSlicedVegetables();
+        Player1.transform.localPosition = new Vector3(-5.55f, 0, 0);
+        Player2.transform.localPosition = new Vector3(5.55f, 0, 0);
     }
 }

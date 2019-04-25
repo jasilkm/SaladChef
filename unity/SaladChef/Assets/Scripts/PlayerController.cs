@@ -156,9 +156,11 @@ public class PlayerController : MonoBehaviour
                 }
             case "serveplate":
                 {
-                    if (SlicedVegetables.Count == 0) return;
+                  
+
                     SlicePlate slicePlate = other.GetComponent<SlicePlate>();
                     if (slicePlate.SlicePlateId != PlayerID) return;
+                    if (SlicedVegetables.Count == 0) return;
                     //Debug.Log("Serve plate detected"+ this);
                     ServePlateController servePlateController = GameObject.FindObjectOfType<ServePlateController>();
                     servePlateController.AddSlicesToPlayer(this.transform,other.gameObject);
@@ -169,6 +171,7 @@ public class PlayerController : MonoBehaviour
                     // combination move to trach
                     if (SlicedVegetables.Count > 0)
                     {
+                        _isSliceAdded = false;
                         foreach (var item in SlicedVegetables)
                         {
                             Destroy(item.gameObject);
@@ -176,7 +179,7 @@ public class PlayerController : MonoBehaviour
                         SlicedVegetables.Clear();
                         hudController.ClearCollectedVeg(this.PlayerID);
                         hudController.UpdatePlayerScore(_trashMinusScore,this.PlayerID);
-                        _isSliceAdded = false;
+                      
                     }
                    
                     break;
@@ -229,9 +232,30 @@ public class PlayerController : MonoBehaviour
         {
            // Debug.Log(item.saladIngredients.ToString());
             Destroy(item.gameObject);
-            PickedVegetables.Clear();
+          
             //item.GetComponent<Transform>().SetParent(player);
         }
+        PickedVegetables.Clear();
+    }
+
+    public void RemoveSlicedVegetables()
+    {
+        foreach (var item in SlicedVegetables)
+        {
+            if (item != null)
+            {
+                Destroy(item.gameObject);
+            }
+           
+        }
+        SlicedVegetables.Clear();
+
+    }
+
+    public void ClearWaitPlate()
+    {
+        
+
     }
     #endregion
     #region protected methods

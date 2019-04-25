@@ -26,6 +26,16 @@ public class WaitPlateController : MonoBehaviour
         vegetable.gameObject.SetActive(false);
         _isFilled = false;
     }
+
+    public void ResetPlate()
+    {
+        _isFilled = false;
+        if (vegetable != null)
+        {
+            Destroy(vegetable.gameObject);
+        }
+       
+    }
     // Start is called before the first frame update
     void Start()
     {

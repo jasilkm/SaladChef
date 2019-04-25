@@ -14,6 +14,8 @@ public class GameController : MonoBehaviour
     public HudController hudController;
     public TimerController timerController;
     public GameOverController gameOverController;
+    public WaitPlateController waitPlateController1;
+    public WaitPlateController waitPlateController2;
     #endregion
     #region protected properties
     #endregion
@@ -76,15 +78,19 @@ public class GameController : MonoBehaviour
     void TimerController_GameCompleted (object sender, GameOverEventArgs args)
     {
         hudController.GetWinnerScoreAndPlayer((player,score)=> {
-
+            playerMasterController.ResetPlayer();
             gameOverController.Show(player.ToString(), score);
+            waitPlateController1.ResetPlate();
+            waitPlateController2.ResetPlate();
             customerController.StopSpawning();
+
         });
 
     }
 
     void GameOverController_GameRestarted(object sender, EventArgs args)
     {
+        playerMasterController.ResetPlayer();
         hudController.ResetGame();
         StartGame();
     }
