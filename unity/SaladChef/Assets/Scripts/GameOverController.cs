@@ -49,7 +49,6 @@ public class GameOverController : MonoBehaviour
 
     public void OnRestartSelected()
     {
-        Debug.Log("selcued");
         GameRestarted?.Invoke(this,EventArgs.Empty);
         Hide();
     }
