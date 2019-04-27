@@ -40,8 +40,8 @@ public class HudController : MonoBehaviour
     {
         _playerOneList = new List<GameObject>();
         _playerTwoList = new List<GameObject>();
-    }
-
+        _playerOneScore.text = "300";
+        }
     void Update()
     {
     }
@@ -134,26 +134,21 @@ public class HudController : MonoBehaviour
 
 
 
-    public void GetWinnerScoreAndPlayer(Action <Players, int> gamescoreAndWinner)
+    public void GetWinnerScoreAndPlayer( Action <int, int> playersScore)
     {
         int playerOneScore = 0;
         int playerTwoScore = 0;
-        int.TryParse(_playerOneScore.ToString(), out playerOneScore);
-        int.TryParse(_playerTwoScore.ToString(), out playerTwoScore);
+        int.TryParse(_playerOneScore.text.ToString(), out playerOneScore);
+        int.TryParse(_playerTwoScore.text.ToString(), out playerTwoScore);
         //    Players player = playerOneScore > playerTwoScore ? Players.player1 : Players.player2;
-        if (playerOneScore> playerTwoScore)
-              gamescoreAndWinner(Players.player1, playerOneScore);
-        else if (playerTwoScore > playerOneScore)
-            gamescoreAndWinner(Players.player2, playerTwoScore);
-        else
-            gamescoreAndWinner(Players.player1, 0);
+        playersScore(playerOneScore , playerTwoScore);
     }
 
-    public void UpdateBonusTime(int player,float time)
+    public void UpdateBonusTime(int playerId,float time)
     {
-        if ((int)player == 1)
+        if ((int)playerId == 1)
             _timerController.PlayerOneGameTime += time;
-        else if ((int)player == 2)
+        else if ((int)playerId == 2)
             _timerController.PlayerTwoGameTime += time;
     }
 

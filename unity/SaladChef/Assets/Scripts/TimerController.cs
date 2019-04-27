@@ -43,8 +43,8 @@ public class TimerController : MonoBehaviour
     #region public methods
     public void StartTimer()
     {
-        PlayerOneGameTime = 100;
-        PlayerTwoGameTime = 100;
+        PlayerOneGameTime = 50;
+        PlayerTwoGameTime = 50;
         IsGamePlaying = true;
         StartCoroutine("CountDown");
     }

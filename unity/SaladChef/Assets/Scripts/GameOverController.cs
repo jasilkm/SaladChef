@@ -23,10 +23,10 @@ public class GameOverController : MonoBehaviour
         
     }
 
-    public void Show(string winner, int score)
+    public void Show(int player1, int player2)
     {
         _gameOverPanel.SetActive(true);
-        GameOverScreenUpdate(winner, score);
+        GameOverScreenUpdate(player1, player2);
     }
 
     public void Hide()
@@ -34,18 +34,44 @@ public class GameOverController : MonoBehaviour
         _gameOverPanel.SetActive(false);
     }
 
-    private void GameOverScreenUpdate(string winner, int score)
+    private void GameOverScreenUpdate(int player1, int player2)
     {
-        if (score > 0)
-        {
-            _winnerText.text = winner.ToString();
-            _scoreText.text = _scoreText.ToString();
-        }
-        else {
-            _winnerText.text = "-";
-            _scoreText.text = "-";
-        }
+         GetWinnerAndScore(player1, player2, (playerName,score)=>{
+            _winnerText.text = playerName;
+            _scoreText.text = score.ToString();
+        });
+
+       
     }
+
+    private void GetWinnerAndScore(int player1, int player2 , Action <string, int>  winnerAndScore)
+    {
+      
+
+            if (player1 == player2)
+            {
+
+                if (player1 == 0)
+                {
+                    winnerAndScore("-", 0);
+                }
+                else
+                {
+                    winnerAndScore("Game TIE", player2);
+                }
+            }
+            else
+            {
+                Players winner = player1 > player2 ? Players.player1 : Players.player2;
+                int score = player1 > player2 ? player1 : player2;
+                winnerAndScore(winner.ToString(), score);
+            }
+       
+
+       
+
+    }
+
 
     public void OnRestartSelected()
     {

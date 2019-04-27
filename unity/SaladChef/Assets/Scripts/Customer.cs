@@ -95,7 +95,6 @@ public class Customer : MonoBehaviour
     /// </summary>
     public void Destroy()
     {
-        Debug.Log("destory called");
         Destroy(_progressBar);
         Destroy(this.gameObject);
     }

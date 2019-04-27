@@ -16,6 +16,7 @@ public class GameController : MonoBehaviour
     public GameOverController gameOverController;
     public WaitPlateController waitPlateController1;
     public WaitPlateController waitPlateController2;
+    public TopTenListController topTenListController;
     #endregion
     #region protected properties
     #endregion
@@ -77,9 +78,11 @@ public class GameController : MonoBehaviour
 
     void TimerController_GameCompleted (object sender, GameOverEventArgs args)
     {
-        hudController.GetWinnerScoreAndPlayer((player,score)=> {
+        hudController.GetWinnerScoreAndPlayer((player1, player2) => {
+
             playerMasterController.ResetPlayer();
-            gameOverController.Show(player.ToString(), score);
+            gameOverController.Show(player1, player2);
+            topTenListController.UpdateTopTenList(player1, player2);
             waitPlateController1.ResetPlate();
             waitPlateController2.ResetPlate();
             customerController.StopSpawning();
