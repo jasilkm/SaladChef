@@ -33,10 +33,11 @@ public class CameraController : MonoBehaviour
         Zoom();
     }
 
+    // Camera Zoom based on player distance
     private void Zoom()
     {
         float cameraZoom = Mathf.Lerp(_maxZoom, _minZoom, GetPlayerDistance() / _zoomLimit);
-        cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, cameraZoom, Time.deltaTime* _speed); 
+        cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, cameraZoom, Time.deltaTime*_speed); 
     }
 
     private float GetPlayerDistance()

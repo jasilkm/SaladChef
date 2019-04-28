@@ -17,6 +17,7 @@ public class GameController : MonoBehaviour
     public WaitPlateController waitPlateController1;
     public WaitPlateController waitPlateController2;
     public TopTenListController topTenListController;
+    public PickUpController pickUpController;
     #endregion
     #region protected properties
     #endregion
@@ -28,11 +29,12 @@ public class GameController : MonoBehaviour
     void Start()
     {
         // the evenrt will receive when a player timer reached 0 so his movemnet will restricted
-        timerController.PlayerTimeCompleted += new EventHandler<TImeCompletedEventArgs>(TimerController_TimeCompleted);
+        timerController.PlayerTimeCompleted += new EventHandler<TimeCompletedEventArgs>(TimerController_TimeCompleted);
         // when both player time has completed
         timerController.GameCompleted += new EventHandler<GameOverEventArgs>(TimerController_GameCompleted);
         // player restrated gamefrom game over screen
         gameOverController.GameRestarted += new EventHandler<EventArgs>(GameOverController_GameRestarted);
+        pickUpController.PickupCollected += new EventHandler<PickUpCollectedEventArgs>(PickUpController_PickupCollected);
         StartGame();
     }
 
@@ -70,10 +72,9 @@ public class GameController : MonoBehaviour
     #region protected methods
     #endregion
 
-    void TimerController_TimeCompleted(object sender, TImeCompletedEventArgs e)
+    void TimerController_TimeCompleted(object sender, TimeCompletedEventArgs e)
     {
         playerMasterController.DisablePlayers(e.PlayerId);
-
     }
 
     void TimerController_GameCompleted (object sender, GameOverEventArgs args)
@@ -86,7 +87,6 @@ public class GameController : MonoBehaviour
             waitPlateController1.ResetPlate();
             waitPlateController2.ResetPlate();
             customerController.StopSpawning();
-
         });
 
     }
@@ -98,5 +98,23 @@ public class GameController : MonoBehaviour
         StartGame();
     }
 
+    void PickUpController_PickupCollected(object sender, PickUpCollectedEventArgs args)
+    {
+        Debug.Log(args.PickUp);
+        switch (args.PickUp)
+        {
+            case PickupsType.Time:
+                timerController.UpdatePlayerTime(args.Player);
+                break;
+            case PickupsType.Speed:
+                playerMasterController.UpdateSpeed(args.Player);
+                break;
+            case PickupsType.score:
+                hudController.UpdatePlayerScore(SaladChefConstants.PLAYER_BONUS_SCORE, (int)args.Player);
+                break;
+            default:
+                break;
+        }
+    }
 
 }

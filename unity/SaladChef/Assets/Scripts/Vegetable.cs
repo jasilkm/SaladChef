@@ -16,6 +16,7 @@ public class Vegetable : MonoBehaviour
     public bool _isSliced = false;
     public float TimeForSlice;
     public int winPoints;
+    public float weightage;
     #endregion
 
     #region Events 

@@ -50,8 +50,9 @@ MonoBehaviour:
   SlicedVegitable: {fileID: 21300000, guid: ff3e52c1aca970a4385b4ca8a83a58c4, type: 3}
   saladIngredients: 2
   _isSliced: 0
-  TimeForSlice: 10
+  TimeForSlice: 4
   winPoints: 10
+  weightage: 15
 --- !u!212 &8161690970548507819
 SpriteRenderer:
   m_ObjectHideFlags: 0

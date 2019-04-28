@@ -8,11 +8,10 @@ public class ProgressBarController : MonoBehaviour
 
     #region private properties
     [SerializeField] private Image _progressImage;
-    private float _elapsedTime;
     private Action _progressCompletedhandler;
     private bool _isProgressable = false;
     private float _requiredTime { get; set; }
-    public float TimeIncreceFactor { get; set; }
+    public float TimeIncreaseFactor { get; set; }
 
 
     #endregion
@@ -20,6 +19,9 @@ public class ProgressBarController : MonoBehaviour
     #region public properties
     public float scaleFactor { get; set; }
     public Image VegSprite;
+    public float ElapsedTime { get; set; }
+
+
 
     #endregion
     #region protected properties
@@ -44,7 +46,7 @@ public class ProgressBarController : MonoBehaviour
     #region public methods
     public void Init(Sprite vegSprite,float requiredTime,Action progressCompletedhandler)   {
         _progressImage.fillAmount = 0;
-        _elapsedTime = 0;
+        ElapsedTime = 0;
         _requiredTime = requiredTime;
         _isProgressable = true;
         VegSprite.gameObject.SetActive(true);
@@ -57,7 +59,7 @@ public class ProgressBarController : MonoBehaviour
         _progressImage.fillAmount = 0;
         _isProgressable = true;
         _requiredTime = requiredTime;
-        _elapsedTime = 0.0f;
+        ElapsedTime = 0.0f;
         scaleFactor = 0.0001f;
         _progressCompletedhandler = progressCompletedhandler;
     }
@@ -67,13 +69,16 @@ public class ProgressBarController : MonoBehaviour
         
     }
 
-    
+    public float CalculateElapsedTimePercentage()
+    {
+        return (ElapsedTime / _requiredTime) * 100;
+    }
 
 
     public void ResetProgress(Sprite vegSprite)
     {
         _progressImage.fillAmount = 0;
-        _elapsedTime = 0;
+        ElapsedTime = 0;
         VegSprite.sprite = vegSprite;
     }
     #endregion
@@ -83,9 +88,8 @@ public class ProgressBarController : MonoBehaviour
     private void UpdateProgressBar()
     {
 
-        _elapsedTime += (Time.deltaTime + TimeIncreceFactor) ;
-        _progressImage.fillAmount = SaladChefHelper.NormalizedValue(_elapsedTime, 0, _requiredTime, 0, 1);
-
+        ElapsedTime += (Time.deltaTime + TimeIncreaseFactor) ;
+        _progressImage.fillAmount = SaladChefHelper.NormalizedValue(ElapsedTime, 0, _requiredTime, 0, 1);
         if (_progressImage.fillAmount >= 1) {
             _progressCompletedhandler();
         }

@@ -58,7 +58,7 @@ public class ServePlateController : MonoBehaviour
 
 
         }
-        player.GetComponent<PlayerController>()._isSliceAdded = true;
+        player.GetComponent<PlayerController>().IsSliceAdded = true;
         //  Vegetable[] obj = this.GetComponentsInChildren<Vegetable>();
 
     }

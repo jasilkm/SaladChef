@@ -10,7 +10,6 @@ public class VegetablesController : MonoBehaviour
     [SerializeField] private Transform[] _spwanPoints; // Spwaning points for Vegitable
     [SerializeField] private GameObject _progressbar;
     [SerializeField] private Transform _uiRoot;
-    [SerializeField] private float _sliceDuration = 4;
 
     private Vegetable SlicedVeg;
     private int[] _randomNumber = new int[] { 0,1,2,3,4,5};
@@ -74,8 +73,9 @@ public class VegetablesController : MonoBehaviour
 
         ProgressBarController progressBarController = progressbar.GetComponent<ProgressBarController>();
         int totalVegCount = veg.Count - 1;
+
         // initialize progressbar  args passing slicing vef g and slice time
-           progressBarController.Init(veg[vegOrder].VegetableSprite, _sliceDuration, () =>
+           progressBarController.Init(veg[vegOrder].VegetableSprite, veg[vegOrder].TimeForSlice, () =>
             {
                 // when player completed  slicing
                 if (totalVegCount == vegOrder)
@@ -95,14 +95,18 @@ public class VegetablesController : MonoBehaviour
                 }
                 else
                 {
-                   ServePlateController.AddSlicesToServePlate(SlicedVeg, cutTable.GetComponent<ChopPad>().ChopPadID);
+                    if (veg.Count != (vegOrder - 1))
+                    {
+                        ServePlateController.AddSlicesToServePlate(SlicedVeg, cutTable.GetComponent<ChopPad>().ChopPadID);
+                        // slicing Next veg if available
+                        vegOrder++;
+                        SlicedVeg._isSliced = true;
+                        slicedVeg(SlicedVeg);
+                        progressBarController.ResetProgress(veg[vegOrder].VegetableSprite);
+                        PlaceVegetablesOnChopboard(veg[vegOrder], cutTable);
 
-                    // slicing Next veg if available
-                    vegOrder++;
-                    SlicedVeg._isSliced = true;
-                    slicedVeg(SlicedVeg);
-                    progressBarController.ResetProgress(veg[vegOrder].VegetableSprite);
-                    PlaceVegetablesOnChopboard(veg[vegOrder], cutTable);
+                    }
+                 
                 }
             });
     }

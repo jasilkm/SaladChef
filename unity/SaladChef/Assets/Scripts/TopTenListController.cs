@@ -29,23 +29,27 @@ public class TopTenListController : MonoBehaviour
             topTenList = new TopTenList();
         }
         
-        /// topTenList = new TopTenList();
         if (topTenList.PlayerOneList.Count >= 10)
         {
             int playerOneMinScore = topTenList.PlayerOneList.Min();
             int playerTwoMinScore = topTenList.PlayerTwoList.Min();
-
+            
             if (playeroneScore > playerOneMinScore)
             {
-                topTenList.PlayerOneList = topTenList.PlayerOneList.OrderByDescending(s => s).ToList();
-                topTenList.PlayerOneList.RemoveAt(topTenList.PlayerOneList.Count - 1);
-                topTenList.PlayerOneList.Add(playeroneScore);
-             
+                if (!topTenList.PlayerOneList.Contains(playerOneMinScore))
+                {
+                    topTenList.PlayerOneList = topTenList.PlayerOneList.OrderByDescending(s => s).ToList();
+                    topTenList.PlayerOneList.RemoveAt(topTenList.PlayerOneList.Count - 1);
+                    topTenList.PlayerOneList.Add(playeroneScore);
+                }
             }
             if (playerotwoScore> playerTwoMinScore) {
-                topTenList.PlayerTwoList = topTenList.PlayerTwoList.OrderByDescending(s => s).ToList();
-                topTenList.PlayerTwoList.RemoveAt(topTenList.PlayerTwoList.Count - 1);
-                topTenList.PlayerTwoList.Add(playerotwoScore);
+                if (!topTenList.PlayerTwoList.Contains(playerTwoMinScore))
+                {
+                    topTenList.PlayerTwoList = topTenList.PlayerTwoList.OrderByDescending(s => s).ToList();
+                    topTenList.PlayerTwoList.RemoveAt(topTenList.PlayerTwoList.Count - 1);
+                    topTenList.PlayerTwoList.Add(playerotwoScore);
+                }
             }
         }
         else

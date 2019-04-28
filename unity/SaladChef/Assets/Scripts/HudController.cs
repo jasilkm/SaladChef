@@ -40,7 +40,6 @@ public class HudController : MonoBehaviour
     {
         _playerOneList = new List<GameObject>();
         _playerTwoList = new List<GameObject>();
-        _playerOneScore.text = "300";
         }
     void Update()
     {
@@ -64,28 +63,38 @@ public class HudController : MonoBehaviour
 
     public void UpdatePlayerScore(int score,int playerId)
     {
+        Debug.Log("Bonus Score "+ score);
         if (playerId == 1)
         {
-            var currentScore = Convert.ToInt32(score); ;
+            int currentScore = Convert.ToInt32(_playerOneScore.text); ;
             currentScore += score;
-            if (currentScore > 0)
-                _playerOneScore.text = currentScore.ToString();
-            else
-                _playerOneScore.text = 0.ToString();
+             _playerOneScore.text = currentScore.ToString();
+ 
         }
         else if (playerId == 2)
         {
-            var currentScore = Convert.ToInt32(score);
+            int currentScore = Convert.ToInt32(_playerTwoScore.text);
             currentScore += score;
-
-            if (currentScore > 0)
-                _playerTwoScore.text = currentScore.ToString();
-            else
-                _playerTwoScore.text = 0.ToString();
+             _playerTwoScore.text = currentScore.ToString();
+         
         }
     
     }
 
+    public void UpdateBothPlayersScore(int fineSore)
+    {
+
+        int playerOneScore = 0;
+        int playerTwoScore = 0;
+        int.TryParse(_playerOneScore.text.ToString(), out playerOneScore);
+        int.TryParse(_playerTwoScore.text.ToString(), out playerTwoScore);
+
+        playerOneScore = (playerOneScore - fineSore) <= 0 ? 0 : (playerOneScore - fineSore);
+        playerTwoScore = (playerTwoScore - fineSore) <= 0 ? 0 : (playerTwoScore - fineSore);
+
+        _playerTwoScore.text = playerTwoScore.ToString();
+        _playerOneScore.text = playerOneScore.ToString();
+    }
    
 
     public void UpdatePlayersCollectedVeg(Sprite veg, int playerID)
@@ -140,16 +149,15 @@ public class HudController : MonoBehaviour
         int playerTwoScore = 0;
         int.TryParse(_playerOneScore.text.ToString(), out playerOneScore);
         int.TryParse(_playerTwoScore.text.ToString(), out playerTwoScore);
-        //    Players player = playerOneScore > playerTwoScore ? Players.player1 : Players.player2;
         playersScore(playerOneScore , playerTwoScore);
     }
 
-    public void UpdateBonusTime(int playerId,float time)
+    public void UpdateBonusTime(int playerId, float time)
     {
         if ((int)playerId == 1)
-            _timerController.PlayerOneGameTime += time;
+            _timerController.UpdatePlayerTime( Players.player1);
         else if ((int)playerId == 2)
-            _timerController.PlayerTwoGameTime += time;
+            _timerController.UpdatePlayerTime(Players.player1);
     }
 
     private void ClearHud()

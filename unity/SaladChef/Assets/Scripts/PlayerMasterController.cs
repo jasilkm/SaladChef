@@ -8,6 +8,7 @@ public class PlayerMasterController : MonoBehaviour
     public PlayerController Player1;
     public PlayerController Player2;
 
+    private Coroutine _bonusTime;
     // Start is called before the first frame update
     void Start()
     {
@@ -53,6 +54,31 @@ public class PlayerMasterController : MonoBehaviour
             completedHandler(true);
         }
     }
+    public void UpdateSpeed(Players player)
+    {
+        if (player == Players.player1)
+            Player1.Speed = SaladChefConstants.PLAYER_BONUS_SPEED;
+        else if (player == Players.player2)
+            Player2.Speed = SaladChefConstants.PLAYER_BONUS_SPEED;
+        // _bonusTime = StartCoroutine(setSpeed(player) );
+
+        StartCoroutine("setSpeed", player);
+    }
+
+    IEnumerator setSpeed(Players player)
+    {
+        Debug.Log("Speed increased");
+
+
+        yield return new WaitForSeconds(20);
+
+        Debug.Log("Speed reduced");
+        if (player == Players.player1)
+            Player1.Speed = SaladChefConstants.PLAYER_SPEED;
+        else if (player == Players.player2)
+            Player2.Speed = SaladChefConstants.PLAYER_SPEED;
+
+    }
 
     public void EnablePlayers()
     {
@@ -73,7 +99,7 @@ public class PlayerMasterController : MonoBehaviour
         }
 
     }
-
+    // Reset all 
     public void ResetPlayer()
     {
         Player1.EnablePlayer();
@@ -82,6 +108,10 @@ public class PlayerMasterController : MonoBehaviour
         Player2.RemoveVegetable();
         Player1.RemoveSlicedVegetables();
         Player2.RemoveSlicedVegetables();
+        if (_bonusTime != null)
+        {
+            StopCoroutine(_bonusTime);
+        }
         Player1.transform.localPosition = new Vector3(-5.55f, 0, 0);
         Player2.transform.localPosition = new Vector3(5.55f, 0, 0);
     }

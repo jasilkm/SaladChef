@@ -15,7 +15,7 @@ public class PersistenceManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-      //PlayerPrefs.DeleteAll();
+    //  PlayerPrefs.DeleteAll();
     }
 
     // Update is called once per frame

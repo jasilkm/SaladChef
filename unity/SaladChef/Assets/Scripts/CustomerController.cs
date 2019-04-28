@@ -21,8 +21,10 @@ public class CustomerController : MonoBehaviour
     #endregion
 
     #region Public properties
+    // customer spwan Point
     public List<CustomerSpwan> customerSpwanPonts = new List<CustomerSpwan>();
     public VegetablesController vegetablesController;
+    public PickUpController pickUpController;
     
     #endregion
 
@@ -33,8 +35,8 @@ public class CustomerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        _spawnedList = new List<Customer>();
         AddSpwanPoints();
-       
     }
 
     // Update is called once per frame
@@ -77,17 +79,22 @@ public class CustomerController : MonoBehaviour
         {
             _compareCompletedHandler(_finedScore, _playerController.PlayerID);
 
-            // wrong combination led to half of life customer
+            // wrong combination  make customer angry and wait time decrease faster
             _customer.UpdateTime();
-            //completedHandler(false);
-            //   var sum = consumerRequestedVeg.Sum(x => x.winPoints);
-            //   _compareCompletedHandler(-sum, _playerController.PlayerID);
+            
 
         }
         else
         {
-            // getting sum of Winpoints want to awareded for player
+            // Checking player has given Salad with in 70% time if yes we will provide a pickup for the player
+            if (_customer.CalcuclateBonusEligible()) {
+                pickUpController.GeneratePickUp((pickup) => {
+                    pickup.Player = _playerController.Player;
+                });
+            }
+            // getting sum of Winpoints want to awarded for player
             var sum = consumerRequestedVeg.Sum(x => x.winPoints);
+            Debug.Log("sum :"+ sum);
             //sending compare result to Game controller
             _compareCompletedHandler(sum, _playerController.PlayerID);
             // removing customer from screen
@@ -95,11 +102,12 @@ public class CustomerController : MonoBehaviour
             // removing veg from player 
             _playerController.RemoveVegetable();
             // this will make sure player grab next set of veg
-            _playerController._isSliceAdded = false;
+            _playerController.IsSliceAdded = false;
             // clearing veg list from hud
             hudController.ClearCollectedVeg(_playerController.PlayerID);
+
             // releasing bonus time to player will add his total time
-            hudController.UpdateBonusTime(_playerController.PlayerID,_bonusTime);
+         //   hudController.UpdateBonusTime(_playerController.PlayerID,_bonusTime);
         }
     }
     /// <summary>
@@ -117,9 +125,9 @@ public class CustomerController : MonoBehaviour
     /// <param name="compareCompletedHandler"></param>
     public void GenerateCustomers(Action<int,int> compareCompletedHandler)
     {
-        _spawnedList = new List<Customer>();
+        // Confirming all spwan points make empty for next generation
+        customerSpwanPonts.ForEach(x => { x._isSpwaned = false; });
         _compareCompletedHandler = compareCompletedHandler;
-      //  _coroutine = SpawnRandomCustomer();
         _coroutine = StartCoroutine(SpawnRandomCustomer());
        
     }
@@ -143,15 +151,20 @@ public class CustomerController : MonoBehaviour
             // initialize  customer and start progressbar also passing his  requeset veg list and his spawing position
            
             cus.Init(vegList,cs.customerSpwanPoint,
-                ()=> {
+                (fine)=> {
+                    // minus score calculating based on sald total scores half
+                    fine = fine / 2;
+                    //If customer leaving with out attending will cause to minus points for both players
+                    hudController.UpdateBothPlayersScore(fine);
+                    // spwaned status reset
+                    cs._isSpwaned = false; 
                     // if  time has finished Action call back will trigger and it will delete 
-                    cs._isSpwaned = false;
-                   cus.Destroy();
+                    cus.Destroy();
+                  
                 },
                    (customerRequested, playerGiven, playerController,cust)=> {  /// this arguents will recive from customer such as customer requested, player has given to customer 
-                     _customer = cust;
+                    _customer = cust;
                     _playerController = playerController;
-                   
                     CompareVegetables(customerRequested, playerGiven);
             });
         }

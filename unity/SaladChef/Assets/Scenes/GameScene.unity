@@ -748,6 +748,54 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 233361836}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &282337767
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 282337768}
+  - component: {fileID: 282337769}
+  m_Layer: 0
+  m_Name: PickupController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &282337768
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 282337767}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 16
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &282337769
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 282337767}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbd3ba73eafa9104699ddd11daf116c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pickup: {fileID: 8290282430182184699, guid: 62348f1b87213ee4987c02bc654ccdfd, type: 3}
+  parentPos: {fileID: 282337768}
+  InfoText: {fileID: 3133816801362307856, guid: 69a16e3fbb64b4f4bbfdd104a2df9cfc,
+    type: 3}
+  UIRoot: {fileID: 1360430224}
 --- !u!1 &292346516
 GameObject:
   m_ObjectHideFlags: 0
@@ -1212,6 +1260,7 @@ MonoBehaviour:
   waitPlateController1: {fileID: 1328815467}
   waitPlateController2: {fileID: 410137652}
   topTenListController: {fileID: 729866113}
+  pickUpController: {fileID: 282337769}
 --- !u!1 &410137647
 GameObject:
   m_ObjectHideFlags: 0
@@ -2619,7 +2668,8 @@ MonoBehaviour:
   hudController: {fileID: 347870255}
   PlayerID: 2
   Speed: 20
-  _isSliceAdded: 0
+  IsSliceAdded: 0
+  Player: 2
 --- !u!114 &1019985108
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3070,6 +3120,7 @@ MonoBehaviour:
   - {fileID: 730231628}
   hudController: {fileID: 347870255}
   vegetablesController: {fileID: 1547677367}
+  pickUpController: {fileID: 282337769}
 --- !u!4 &1152659426
 Transform:
   m_ObjectHideFlags: 0
@@ -3965,6 +4016,49 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1401849078}
   m_CullTransparentMesh: 0
+--- !u!1 &1443311558
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1443311559}
+  - component: {fileID: 1443311560}
+  m_Layer: 0
+  m_Name: ScoreController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1443311559
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1443311558}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 15
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1443311560
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1443311558}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 022cecc993464a54e8cb82b654d79d69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1456169271
 GameObject:
   m_ObjectHideFlags: 0
@@ -4071,7 +4165,6 @@ MonoBehaviour:
   _progressbar: {fileID: 2479349114906252208, guid: bcb5d7aded8310e4ab84030959b8b2c7,
     type: 3}
   _uiRoot: {fileID: 1970778253}
-  _sliceDuration: 4
   ServePlateController: {fileID: 1050449521}
 --- !u!1 &1567914258
 GameObject:
@@ -4275,7 +4368,8 @@ MonoBehaviour:
   hudController: {fileID: 347870255}
   PlayerID: 1
   Speed: 20
-  _isSliceAdded: 0
+  IsSliceAdded: 0
+  Player: 1
 --- !u!114 &1574226168
 MonoBehaviour:
   m_ObjectHideFlags: 0
