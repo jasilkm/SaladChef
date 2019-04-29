@@ -89,6 +89,7 @@ public class CustomerController : MonoBehaviour
             // Checking player has given Salad with in 70% time if yes we will provide a pickup for the player
             if (_customer.CalcuclateBonusEligible()) {
                 pickUpController.GeneratePickUp((pickup) => {
+                    // assiging which player earned the Power up - he can only able to access
                     pickup.Player = _playerController.Player;
                 });
             }

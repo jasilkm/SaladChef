@@ -21,23 +21,32 @@ public class TopTenListController : MonoBehaviour
         
     }
 
+    // Top Ten list 
+
     public void UpdateTopTenList(int playeroneScore, int playerotwoScore)
     {
+        // Checking any Player list store in Persistance
          topTenList = PersistenceManager.GetSharedInstance().GetTopTenList();
+
+         // if player has playing first time he wont have any score in top ten list so we creating a new List for add
         if (topTenList == null)
         {
             topTenList = new TopTenList();
         }
         
+        // We will store only 10 Score borad data for both player
         if (topTenList.PlayerOneList.Count >= 10)
         {
+            // Calculating both player Minum score for replace if current score is higher than min
             int playerOneMinScore = topTenList.PlayerOneList.Min();
             int playerTwoMinScore = topTenList.PlayerTwoList.Min();
             
             if (playeroneScore > playerOneMinScore)
             {
+                // Checking user earned score already have in the list 
                 if (!topTenList.PlayerOneList.Contains(playerOneMinScore))
                 {
+                    // Adding score in last row
                     topTenList.PlayerOneList = topTenList.PlayerOneList.OrderByDescending(s => s).ToList();
                     topTenList.PlayerOneList.RemoveAt(topTenList.PlayerOneList.Count - 1);
                     topTenList.PlayerOneList.Add(playeroneScore);
@@ -54,19 +63,23 @@ public class TopTenListController : MonoBehaviour
         }
         else
         {
+            //To ten list has less than 10 we will add if same score does not exisits
             if (playeroneScore > 0)
             {
-                topTenList.PlayerOneList.Add(playeroneScore);
+                if (!topTenList.PlayerOneList.Contains(playeroneScore))
+                    topTenList.PlayerOneList.Add(playeroneScore);
             }
 
             if (playerotwoScore > 0)
             {
-                topTenList.PlayerTwoList.Add(playerotwoScore);
+                if (!topTenList.PlayerTwoList.Contains(playerotwoScore))
+                    topTenList.PlayerTwoList.Add(playerotwoScore);
             }
           
         }
-      
+      // Clear if allready created list in Game over screen
         ClearTopTenList();
+        // create score list 
         CreateTopTenList();
         PersistenceManager.GetSharedInstance().SaveTopTenList(topTenList);
     }

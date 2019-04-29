@@ -80,7 +80,6 @@ public class GameController : MonoBehaviour
     void TimerController_GameCompleted (object sender, GameOverEventArgs args)
     {
         hudController.GetWinnerScoreAndPlayer((player1, player2) => {
-
             playerMasterController.ResetPlayer();
             gameOverController.Show(player1, player2);
             topTenListController.UpdateTopTenList(player1, player2);
@@ -90,7 +89,7 @@ public class GameController : MonoBehaviour
         });
 
     }
-
+    // Restart Game
     void GameOverController_GameRestarted(object sender, EventArgs args)
     {
         playerMasterController.ResetPlayer();
@@ -98,6 +97,7 @@ public class GameController : MonoBehaviour
         StartGame();
     }
 
+    // Pickup/Power up collected 
     void PickUpController_PickupCollected(object sender, PickUpCollectedEventArgs args)
     {
         Debug.Log(args.PickUp);

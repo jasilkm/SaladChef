@@ -27,6 +27,8 @@ public class ServePlateController : MonoBehaviour
 
 
     #region public methods
+
+    // When Hit player on serv plate/ Sliced plate veg add to plater
     public void AddSlicesToServePlate(Vegetable sliced, int playerId)
     {
         if (playerId == 1)
@@ -48,6 +50,7 @@ public class ServePlateController : MonoBehaviour
 
     }
 
+    // Sliced veg to Player
     public void AddSlicesToPlayer(Transform player, GameObject plate)
     {
         Vegetable[] veg = plate.GetComponentsInChildren<Vegetable>();

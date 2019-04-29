@@ -1,8 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
-using System;
 public class PlayerController : MonoBehaviour
 {
     #region private properties
@@ -19,7 +16,7 @@ public class PlayerController : MonoBehaviour
     public List<Vegetable> SlicedVegetables = new List<Vegetable>();
     public HudController hudController;
     public int PlayerID; // Player id 
-    public float Speed = 12f; // Player Movement SPeed
+    public float Speed = 20f; // Player Movement SPeed
     public bool IsSliceAdded = false;
     public Players Player;
     // Number of Pickups Collected 
@@ -123,7 +120,7 @@ public class PlayerController : MonoBehaviour
                 }
             case "vegcutter":
                 {
-                    OnHitvegetableCutter(other);
+                    OnHitVegetableCutter(other);
                     break;
                 }
             case "serveplate":
@@ -206,7 +203,7 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                Debug.Log("Vegitable availabel");
+                Debug.Log("Vegitable availabl");
             }
         }
         else
@@ -254,7 +251,7 @@ public class PlayerController : MonoBehaviour
        
     }
 
-    private void OnHitvegetableCutter(Collider other)
+    private void OnHitVegetableCutter(Collider other)
     {
         ChopPad chopPad = other.GetComponent<ChopPad>();
         //chop board restcted based on the user
@@ -265,8 +262,8 @@ public class PlayerController : MonoBehaviour
             _isActive = true;
             vegetablesController.SliceVegetable(PickedVegetables, other.transform,
                 (slice) => {
-                                // this call back will recived when a vege slice has complted
-                                SlicedVegetables.Add(slice);
+                   // this call back will recived when a vege slice has complted
+                    SlicedVegetables.Add(slice);
                 },
 
                 () => {
@@ -283,7 +280,6 @@ public class PlayerController : MonoBehaviour
              if (IsSliceAdded) return;
                 Vegetable veg = other.GetComponentInChildren<Vegetable>();
                     //
-                   
                     if (PickedVegetables.Count != maxVegeCanCollect)
                     {
                         // list updating picked vege

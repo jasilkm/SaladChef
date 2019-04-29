@@ -10,15 +10,17 @@ public class HudController : MonoBehaviour
     [SerializeField] private Text _playerTwoTime;
     [SerializeField] private Text _playerOneScore;
     [SerializeField] private Text _playerTwoScore;
+
     [SerializeField] private HorizontalLayoutGroup PlayerOneVegCollected;
     [SerializeField] private HorizontalLayoutGroup PlayerTwoVegCollected;
     private List<GameObject> _playerOneList;
     private List<GameObject> _playerTwoList;
     private Action<int, int> _gameCompleted;
     [SerializeField] private TimerController _timerController;
-
+    
     #endregion
     #region public properties
+    
     #endregion
     #region protected properties
     #endregion
@@ -61,9 +63,10 @@ public class HudController : MonoBehaviour
         _timerController.ResetGame();
     }
 
+    // Player score update this method will call  from GameController for Update and Player controller for Trash
     public void UpdatePlayerScore(int score,int playerId)
     {
-        Debug.Log("Bonus Score "+ score);
+       // Debug.Log("Bonus Score "+ score);
         if (playerId == 1)
         {
             int currentScore = Convert.ToInt32(_playerOneScore.text); ;
@@ -96,7 +99,7 @@ public class HudController : MonoBehaviour
         _playerOneScore.text = playerOneScore.ToString();
     }
    
-
+    // Updating Playes collected veges in Hud
     public void UpdatePlayersCollectedVeg(Sprite veg, int playerID)
     {
         GameObject vegObject = CreateImage(veg);
@@ -142,7 +145,7 @@ public class HudController : MonoBehaviour
     }
 
 
-
+    // Sending both player scores to Game controller for calulate and show in game over screen
     public void GetWinnerScoreAndPlayer( Action <int, int> playersScore)
     {
         int playerOneScore = 0;
@@ -152,6 +155,8 @@ public class HudController : MonoBehaviour
         playersScore(playerOneScore , playerTwoScore);
     }
 
+    // Pick up collected Bonus time Updating in TimerController
+
     public void UpdateBonusTime(int playerId, float time)
     {
         if ((int)playerId == 1)
@@ -160,6 +165,7 @@ public class HudController : MonoBehaviour
             _timerController.UpdatePlayerTime(Players.player1);
     }
 
+    // Clear Hud
     private void ClearHud()
     {
 

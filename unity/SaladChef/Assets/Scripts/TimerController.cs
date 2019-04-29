@@ -52,7 +52,7 @@ public class TimerController : MonoBehaviour
         StartCoroutine("CountDownPlayerOne");
     }
 
-
+    // When a Player collect Power ups for Time
     public void UpdatePlayerTime(Players players)
     {
         if (players == Players.player1)
@@ -101,6 +101,7 @@ public class TimerController : MonoBehaviour
         }
     }
 
+    // Game reset time also will reset
     public void ResetGame()
     {
         _playerOneGameTime = _playerTwoGameTime= SaladChefConstants.GAME_PLAY_TIME;
@@ -108,6 +109,7 @@ public class TimerController : MonoBehaviour
 
     #endregion
     #region protected  methods
+    // This event will fire when a player rechard his allowed time
     protected void OnTimeCompleted(int PlayerId)
     {
         TimeCompletedEventArgs args = new TimeCompletedEventArgs();

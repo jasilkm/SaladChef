@@ -22,7 +22,7 @@ public class PlayerMasterController : MonoBehaviour
     }
 
     /// <summary>
-    /// this method with compare user requested veg and Player Choosed
+    /// this method with compare user requested veg and Player given
     /// </summary>
     /// <param name="playerPickedVeg">Player picked Vegitable </param>
     /// <param name="consumerRequestedVeg"> consumer requested veg</param>
@@ -54,6 +54,8 @@ public class PlayerMasterController : MonoBehaviour
             completedHandler(true);
         }
     }
+
+    // Update Player speed when Player has collected Power up
     public void UpdateSpeed(Players player)
     {
         if (player == Players.player1)
@@ -65,6 +67,7 @@ public class PlayerMasterController : MonoBehaviour
         StartCoroutine("setSpeed", player);
     }
 
+    // When a speed Power up has collected  wll start this IEnumerator to slow down when desired time is achived
     IEnumerator setSpeed(Players player)
     {
         Debug.Log("Speed increased");

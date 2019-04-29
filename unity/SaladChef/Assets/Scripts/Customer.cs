@@ -85,7 +85,7 @@ public class Customer : MonoBehaviour
     public void Init(List<Vegetable> veg,Transform pos, Action<int> timeCompletedHandler, Action<List<Vegetable>, List<Vegetable>,PlayerController,Customer> playerHitted)
     {
         // Waiting period for a customer
-        _lifeTime = 150;//veg.Sum(x=>x.weightage);
+        _lifeTime = veg.Sum(x=>x.weightage);
         _gainedScore = veg.Sum(x => x.winPoints);
         _playerHitted = playerHitted;
         CustomerRequestedVeg = veg;
